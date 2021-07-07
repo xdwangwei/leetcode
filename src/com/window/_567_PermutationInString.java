@@ -1,0 +1,106 @@
+package com.window;
+
+import java.util.HashMap;
+
+/**
+ * @author wangwei
+ * 2020/7/27 12:40
+ * 给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。
+ *
+ * 换句话说，第一个字符串的排列之一是第二个字符串的子串。
+ *
+ * 示例1:
+ *
+ * 输入: s1 = "ab" s2 = "eidbaooo"
+ * 输出: True
+ * 解释: s2 包含 s1 的排列之一 ("ba").
+ *  
+ *
+ * 示例2:
+ *
+ * 输入: s1= "ab" s2 = "eidboaoo"
+ * 输出: False
+ *  
+ *
+ * 注意：
+ *
+ * 输入的字符串只包含小写字母
+ * 两个字符串的长度都在 [1, 10,000] 之间
+ *
+ * 来源：力扣（LeetCode）
+ * 链接：https://leetcode-cn.com/problems/permutation-in-string
+ * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+ *
+ */
+public class _567_PermutationInString {
+
+    /**
+     * 是明显的滑动窗口算法，相当给你一个 S 和一个 T，
+     * 请问你 S 中是否存在一个子串，包含 T 中所有字符 且不包含 其他字符？
+     *
+     * 其实和_438_一样，438是找s中所有子串中 那些子串==t的另一种排列（长度一样，字符一样，次数一样）
+     *
+     * 这里只需要找到一个就可以返回
+     *
+     * 注意题目问的是 s2 是否包含 s1 的排列
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public boolean checkInclusion(String s1, String s2) {
+        if (s2.length() < s1.length()) return false;
+        // 窗口中应该包含哪些字符，及其个数
+        HashMap<Character, Integer> need = new HashMap<>();
+        // 窗口中包含的字符，及其个数
+        HashMap<Character, Integer> window = new HashMap<>();
+        // 窗口中包含的满足要求的字符个数
+        int valid = 0;
+
+        // 统计需要出现的字符和个数
+        for (int i = 0; i < s1.length(); ++i) {
+            need.put(s1.charAt(i), need.getOrDefault(s1.charAt(i), 0) + 1);
+        }
+
+        // 滑动窗口
+        int left = 0, right = 0;
+
+        while (right < s2.length()) {
+            char c = s2.charAt(right);
+            // 扩大窗口右边界
+            right++;
+            // 更新窗口内数据
+            // 如果这个字符需要包含
+            if (need.containsKey(c)) {
+                // 他在窗口出现次数加1
+                window.put(c, window.getOrDefault(c, 0) + 1);
+                // 如果他的出现次数达到了s2中的次数
+                // 那么当前窗口内满足要求的字符数加1
+                if (window.get(c).intValue() == need.get(c).intValue())
+                    valid++;
+            }
+
+            // 因为寻找的是s1的排列，所以窗口大小应该保持和s1的长度一样
+            // 缩小窗口
+            while (right - left >= s1.length()) {
+                // 如果此时窗口的合法字符数达到要求
+                // 说明未包含其他字符，此时的窗口代表的子串就是s2的一个排列
+                if (valid == need.size()) return true;
+
+                // 当前窗口最左边的字符
+                char d = s2.charAt(left);
+                // 扩大窗口左边界，缩小窗口
+                left++;
+                // 更新窗口内一系列数据
+                // 如果这个字符是需要包含的，那就更新窗口中的数据
+                if (need.containsKey(d)) {
+                    // 如果这个字符在窗口中的出现次数已经达到要求了
+                    if (need.get(d).intValue() == window.get(d).intValue())
+                        valid--; // 窗口内的有效字符数减1
+                    // 这个字符出现次数减1
+                    window.put(d, window.get(d) - 1);
+                }
+            }
+        }
+        return false;
+    }
+}
