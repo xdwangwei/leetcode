@@ -4,8 +4,44 @@ package com.dp;
  * @Author: wangwei
  * @Description:
  * @Time: 2019/11/19 周二 19:09
+ *
+ * 给定一个整数数组 nums，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+ *
+ *
+ * 示例 1：
+ *
+ * 输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+ * 输出：6
+ * 解释：连续子数组[4,-1,2,1] 的和最大，为6 。
+ * 示例 2：
+ *
+ * 输入：nums = [1]
+ * 输出：1
+ * 示例 3：
+ *
+ * 输入：nums = [0]
+ * 输出：0
+ * 示例 4：
+ *
+ * 输入：nums = [-1]
+ * 输出：-1
+ * 示例 5：
+ *
+ * 输入：nums = [-100000]
+ * 输出：-100000
+ *
+ *
+ * 提示：
+ *
+ * 1 <= nums.length <= 3 * 104
+ * -105 <= nums[i] <= 105
+ *
+ * 来源：力扣（LeetCode）
+ * 链接：https://leetcode-cn.com/problems/maximum-subarray
+ * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  **/
 public class _53_TheMaxSubSequenceSum {
+
     public static int solution(int[] nums){
         int n = nums.length;
         int[] dp = new int[n]; //dp[j]表示从nums[0]到nums[j]的最大子序列和
@@ -25,13 +61,13 @@ public class _53_TheMaxSubSequenceSum {
      * 如何找状态转移方程呢？
      * 按照数学归纳法，假设我们知道了 dp[i-1]，如何推导出 dp[i] 呢？
      *
-     * 实际上是不行的，因为子数组一定是连续的，
+     * 实际上是不行的，因为子数组一定要连续的，
      * 按照我们当前 dp 数组定义，并不能保证 nums[0..i] 中的最大子数组与 nums[i+1] 是相邻的，
      * 也就没办法从 dp[i] 推导出 dp[i+1]。
      *
      * 所以说我们这样定义 dp 数组是不正确的，无法得到合适的状态转移方程。
      * 对于这类子数组问题，我们就要重新定义 dp 数组的含义：
-     * 以 nums[i] 为结尾的「最大子数组和」为 dp[i]。
+     * 以 nums[i] 为【结尾】的「最大子数组和」为 dp[i]。
      * @param nums
      * @return
      */
