@@ -57,6 +57,35 @@ public class _23_MergeKLists {
 		}
 		return dummy.next;
 	}
+
+	/**
+	 * 优先队列
+	 *
+	 * @param lists
+	 * @return
+	 */
+	public ListNode solution21(ListNode[] lists) {
+		if (lists.length == 0) {
+			return null;
+		}
+		PriorityQueue<ListNode> pq = new PriorityQueue<ListNode>((o1, o2) -> o1.val - o2.val);
+		for (int i = 0; i < lists.length; ++i) {
+			if (lists[i] != null) {
+				pq.offer(lists[i]);
+			}
+		}
+		ListNode dummy = new ListNode(-1);
+		ListNode head = dummy;
+		while (!pq.isEmpty()) {
+			ListNode cur = pq.poll();
+			dummy.next = cur;
+			dummy = dummy.next;
+			if (cur.next != null) {
+				pq.offer(cur.next);
+			}
+		}
+		return head.next;
+	}
 	
 	/**
 	 * 合并两个列表的升级版

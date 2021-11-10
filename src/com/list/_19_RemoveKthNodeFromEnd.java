@@ -64,4 +64,63 @@ public class _19_RemoveKthNodeFromEnd {
 		p.next = p.next.next;
 		return dummyHead.next;
 	}
+
+	/**
+	 * 删除链表倒数第n个节点
+	 * 先找到链表倒数第n+1个节点。然后 p.next = p.next.next即可。
+	 * 因为我们从后往前多走了一步，所以为了避免空指针，增加一个头结点。它并不会影响最终结果，因为最后还是返回dummy.next
+	 * @param head
+	 * @param n
+	 * @return
+	 */
+	public ListNode removeNthFromEnd(ListNode head, int n) {
+		// 虚拟头节点
+		ListNode dummy = new ListNode(-1);
+		dummy.next = head;
+		// 删除倒数第 n 个，要先找倒数第 n + 1 个节点
+		ListNode x = findFromEnd(dummy, n + 1);
+		// 删掉倒数第 n 个节点
+		x.next = x.next.next;
+		return dummy.next;
+	}
+
+	/**
+	 * 单链表的倒数第k个节点
+	 *
+	 * 从前往后寻找单链表的第k个节点很简单，一个 for 循环遍历过去就找到了，但是如何寻找从后往前数的第k个节点呢？
+	 *
+	 * 那你可能说，假设链表有n个节点，倒数第k个节点就是正数第n - k个节点，不也是一个 for 循环的事儿吗？
+	 *
+	 * 是的，但是算法题一般只给你一个ListNode头结点代表一条单链表，你不能直接得出这条链表的长度n，而需要先遍历一遍链表算出n的值，然后再遍历链表计算第n - k个节点。
+	 *
+	 * 也就是说，这个解法需要遍历两次链表才能得到出倒数第k个节点。
+	 *
+	 * 那么，我们能不能只遍历一次链表，就算出倒数第k个节点？可以做到的，如果是面试问到这道题，面试官肯定也是希望你给出只需遍历一次链表的解法。
+	 *
+	 * 这个解法就比较巧妙了，假设k = 2，思路如下：
+	 *
+	 * 首先，我们先让一个指针p1指向链表的头节点head，然后走k步：
+	 * 现在的p1，只要再走n - k步，就能走到链表末尾的空指针了对吧？
+	 *
+	 * 趁这个时候，再用一个指针p2指向链表头节点head：
+	 * 接下来就很显然了，让p1和p2同时向前走，p1走到链表末尾的空指针时走了n - k步，p2也走了n - k步，也就恰好到达了链表的倒数第k个节点：
+	 * 这样，只遍历了一次链表，就获得了倒数第k个节点p2。
+	 * @param head
+	 * @param k
+	 * @return
+	 */
+	private ListNode findFromEnd(ListNode head, int k) {
+		ListNode p1 = head, p2 = head;
+		// p1 先向前走k步
+		for (int i = 0; i < k; i++) {
+			p1 = p1.next;
+		}
+		// p2和p1同时向前，p1走到null的时候代表着p2走了n-k步，也就是到达了倒数第k个节点
+		while (p1 != null) {
+			p2 = p2.next;
+			p1 = p1.next;
+		}
+		// 此时返回p2即可
+		return p2;
+	}
 }

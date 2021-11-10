@@ -63,7 +63,7 @@ public class _141_LinkedListCycle {
 
     /**
      * 双指针 时间复杂度 O(n) 空间复杂度 O(1)
-     * 两个速度不同的人在同一个赛道上跑步，最终速度快的会追上速度慢的，超过他一圈
+     * 两个速度不同的人在同一个赛道上跑步，最终速度快的会追上速度慢的，超过他一圈(第一次相遇)
      * 不妨让快指针的速度是慢指针速度的二倍
      *      如果有环，快指针会追上慢指针
      *      无环，快指针会跑到null
@@ -79,7 +79,7 @@ public class _141_LinkedListCycle {
         while (fast != null && fast.next != null) {
             fast = fast.next.next;
             slow = slow.next;
-            // 最终相遇
+            // 最终相遇(此时，fast领先slow一圈)
             if (fast == slow) return true;
         }
         return false;
