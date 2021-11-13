@@ -64,4 +64,8 @@ public class _47_PermutationsPlus {
             visited[i] = false;
         }
     }
+
+    public static void main(String[] args) {
+        System.out.println(new _47_PermutationsPlus().permuteUnique(new int[]{1, 1, 2}));
+    }
 }

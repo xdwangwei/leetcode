@@ -48,7 +48,7 @@ public class _560_SubArraySumEqualsK {
     }
 
     /**
-     * 第一种解法，最后的双重循环，其实对于每个sum[i]来说，想知道有多少个sum[j]满足 sum[j]=sun[i]-k
+     * 第一种解法，最后的双重循环，其实对于每个sum[i]来说，想知道有多少个sum[j]满足 sum[j]=sum[i]-k
      * 我直接记录下有几个 sum[j] 和 sum[i] - k 相等，直接更新结果，就避免了内层的 for 循环
      */
     public int subarraySum2(int[] nums, int k) {
@@ -64,9 +64,10 @@ public class _560_SubArraySumEqualsK {
             // 对于每个sum[i]，想知道有多少个sum[j]满足 sum[j]=sum[i]-k
             // sum[j]一定会小于sum[i]，所以它一定在之前统计过了(最后一行)
             int sum_j = sum_i - k;
-            if (sumMap.containsKey(sum_j))
+            if (sumMap.containsKey(sum_j)) {
                 // 更新组合数
                 ans += sumMap.get(sum_j);
+            }
             // 当前这个前缀和在map中的出现次数增1
             sumMap.put(sum_i, sumMap.getOrDefault(sum_i, 0) + 1);
         }
