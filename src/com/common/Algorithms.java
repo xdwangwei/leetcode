@@ -1,4 +1,4 @@
-package com.my;
+package com.common;
 
 /**
  * @author wangwei

@@ -100,9 +100,9 @@ public class _222_CountCompleteBinaryTreeNodes {
      *
      * 时间复杂度是 O(logN*logN)
      *
-     * 最厚的两个递归只有一个会真的递归下去，另一个一定会触发hl == hr而立即返回，不会递归下去。
+     * 最后的两个递归只有一个会真的递归下去，另一个一定会触发hl == hr而立即返回，不会递归下去。
      *
-     * 原因如下：一棵完全二叉树的两棵子树，至少有一棵是满二叉树：
+     * 原因如下：一棵完全二叉树(紧凑靠左排列)的两棵子树，至少有一棵是满二叉树：
      *
      * 算法的递归深度就是树的高度 O(logN)，每次递归所花费的时间就是 while 循环，需要 O(logN)，所以总体的时间复杂度是 O(logN*logN)
      */
@@ -126,7 +126,7 @@ public class _222_CountCompleteBinaryTreeNodes {
         if (hl == hr) {
             return (int)Math.pow(2, hl) - 1;
         }
-        // 如果左右高度不同，则按照普通二叉树的逻辑计算
+        // 如果左右高度不同，则按照普通二叉树的逻辑计算，这两个递归只有一个会一直递归下去
         return 1 + countCompleteBinaryTreeNodes(root.left) + countCompleteBinaryTreeNodes(root.right);
     }
 }
