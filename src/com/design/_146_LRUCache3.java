@@ -1,4 +1,4 @@
-package com.order;
+package com.design;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -40,7 +40,7 @@ import java.util.Map;
 /**
  * 使用java默认实现的 LinkedHashMap
  */
-public class _146_LRUCache1 extends LinkedHashMap<Integer, Integer> {
+public class _146_LRUCache3 extends LinkedHashMap<Integer, Integer> {
 
     /**
      * 要让 put 和 get 方法的时间复杂度为 O(1)，我们可以总结出 cache 这个数据结构必要的条件：
@@ -97,7 +97,7 @@ public class _146_LRUCache1 extends LinkedHashMap<Integer, Integer> {
      * 构造函数，指定初始容量
      * @param capacity
      */
-    public _146_LRUCache1(final int capacity) {
+    public _146_LRUCache3(final int capacity) {
         // 指定 accessOrder 为 true，让内部的双向链表按照节点访问顺序维护
         super(capacity, 0.75F, true);
         this.capacity = capacity;

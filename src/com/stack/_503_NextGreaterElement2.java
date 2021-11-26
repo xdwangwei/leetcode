@@ -23,36 +23,6 @@ public class _503_NextGreaterElement2 {
 
     /**
      * 单调栈
-     * 假如数组不是循环数组
-     * 因为要找的是它后面第一个比他大的元素，所以当处理num[i]时，它身后的元素都已经入栈，这样就能逐个弹出栈中比他小的元素
-     * 如果栈空了，那么next[i]=-1.否则栈顶就是它身后第一个比他大的元素
-     * 所以应该倒序遍历
-     * 每个人都要往身后看，所以应该从后往前遍历
-     * 再从后往前入栈，就能正着出栈
-     * while 循环是把两个“高个”元素之间的元素排除，因为他们的存在没有意义，前面挡着个“更高”的元素，所以他们不可能被作为后续进来的元素的 Next Great Number 了
-     * 如果栈空了，说明后面没有比他更高的
-     * 否则栈顶元素就是他后面第一个比他高的
-     * @param nums
-     * @return
-     */
-    public int[] nextGreaterElements(int[] nums) {
-        // 保存结果
-        int[] res = new int[nums.length];
-        Stack<Integer> stack = new Stack<>();
-        // 倒着遍历
-        for (int i = nums.length - 1; i >= 0; --i) {
-            // 他后面的比他低的统统出栈
-            while (!stack.empty() && stack.peek() <= nums[i])
-                stack.pop();
-            // 如果栈空了，说明后面没有比他更高的
-            res[i] = stack.isEmpty() ? -1 : stack.peek();
-            // 自己成为“高个”
-            stack.push(nums[i]);
-        }
-        return res;
-    }
-
-    /**
      * 增加了环形属性后，问题的难点在于：这个 Next 的意义不仅仅是当前元素的右边了，有可能出现在当前元素的左边
      * 比如 [2,2,1,4,3] 本来对于3来说答案-1，但循环数组，答案变成4
      * 明确问题，问题就已经解决了一半了。
