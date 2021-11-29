@@ -1,7 +1,6 @@
 package com.queue;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * @author wangwei
@@ -46,6 +45,26 @@ import java.util.LinkedList;
  *
  */
 public class _239_SlidingWindowMaximum {
+
+    /**
+     * 单调队列
+     * 单调栈和单调队列的区别：单调栈由于只能取到栈顶（back），相当于是一个临近的最大值，单调队列可以取到全局最大值（front）。
+     * 这道题是在一个窗口中取最大值，这个值可能是窗口中任意一个值，所以就是范围内取值，选择单调队列
+     *
+     * 为什么用队列？
+     * 滑动窗口 [i, j] 扩张就是 j++， 缩小就是 i++， 这就相当于 一个双端队列，在队头和队尾都要能操作
+     *
+     * 所以这个题选择【双端队列】来存储每个窗口范围内的元素。
+     * 对于每一个窗口，要在O(1)时间复杂度取出最大值，所以这个队列应该具有单调性，这样直接访问队首或队尾元素就是最大值
+     * 那么应该是递增还是递减队列呢？
+     * 如果是递增队列，每一次的队尾就是最大值，比如对于 [1,3,2,1] k = 3，
+     *      1 入队，3 入队，2 破坏递增性，但是满足3个元素了，所以 res[0] = 3
+     *      3 出队，2 入队，下一个元素是1，队列中第一个1已经不属于这个窗口了，应该移除。队列中[2]
+     *          3已经被移走了。第二个窗口的最大值肯定错误，而实际上应该也是3
+     * 如果是递减队列，每一次的队首就是最大值，同样对于 [1,3,2,1]
+     *      1入队，3破坏递减性，1出队，3入队，队列[3]，对于2，是第3个元素，第一个窗口凑齐，它的最大值是队首3
+     *      然后2入队，队列[32]，下一个是1，1入队[321]，第二个窗口凑齐，最大值还是队首元素3，答案正确
+     */
 
     /**
      * 最简单直接的方法是遍历每个滑动窗口，找到每个窗口的最大值。
@@ -119,6 +138,57 @@ public class _239_SlidingWindowMaximum {
             // 因为凑够三个元素窗口才满，所以要注意下标，防止越界
             if (i - k + 1 >= 0)
                 res[i - k + 1] = nums[deque.getFirst()];
+        }
+        return res;
+    }
+
+    /**
+     * 方法：优先队列
+     * 思路与算法
+     *
+     * 对于「最大值」，我们可以想到一种非常合适的数据结构，那就是优先队列（堆），其中的大根堆可以帮助我们实时维护一系列元素中的最大值。
+     *
+     * 对于本题而言，初始时，我们将数组 nums 的前 kk个元素放入优先队列中。
+     * 每当我们向右移动窗口时，我们就可以把一个新的元素放入优先队列中，此时堆顶的元素就是堆中所有元素的最大值。
+     * 然而这个最大值可能并不在滑动窗口中，在这种情况下，这个值在数组 nums 中的位置出现在滑动窗口左边界的左侧。
+     * 因此，当扩大窗口时(加入当前元素前)，先判断堆顶元素，如果是这个窗口以外的元素，那先poll掉，
+     *
+     * 我们不断地移除堆顶的元素，直到其确实出现在滑动窗口中。
+     * 此时，堆顶元素就是滑动窗口中的最大值。
+     * 为了方便判断堆顶元素与滑动窗口的位置关系，我们在优先队列中存储每个元素在原数组中的index。然后优先队列的比较规则设置为按照这个值在nums中对应值降序排列
+     * PriorityQueue<Integer> queue = new PriorityQueue<>(((o1, o2) -> nums[o2] - nums[o1]));
+     *
+     * 作者：LeetCode-Solution
+     * 链接：https://leetcode-cn.com/problems/sliding-window-maximum/solution/hua-dong-chuang-kou-zui-da-zhi-by-leetco-ki6m/
+     * 来源：力扣（LeetCode）
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] maxSlidingWindow2(int[] nums, int k) {
+        if (nums == null || nums.length < k || k == 0) {
+            return new int[0];
+        }
+        PriorityQueue<Integer> queue = new PriorityQueue<>(((o1, o2) -> nums[o2] - nums[o1]));
+        int len = nums.length - k + 1;
+        // 前 k 个元素入队，注意入队的是下标
+        for (int i = 0; i < k; i++) {
+            queue.offer(i);
+        }
+        int[] res = new int[len];
+        // k个元素凑齐第一个窗口
+        res[0] = nums[queue.peek()];
+        // 之后的元素
+        for (int i = k; i < nums.length; i++) {
+            // 当前位置i对应的窗口的起始位置应该是 i -k + 1，队列头元素是最大值，但如果它不在当前窗口中，就要移除
+            while (!queue.isEmpty() && queue.peek() < i - k + 1) {
+                queue.poll();
+            }
+            // 当前元素入队列
+            queue.offer(i);
+            // 当前元素对应的窗口
+            res[i - k + 1] = nums[queue.peek()];
         }
         return res;
     }
