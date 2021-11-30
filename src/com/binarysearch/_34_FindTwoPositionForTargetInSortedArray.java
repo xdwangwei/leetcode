@@ -1,4 +1,4 @@
-package com.array;
+package com.binarysearch;
 
 /**
  * @author wangwei

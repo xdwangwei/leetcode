@@ -1,4 +1,4 @@
-package com.array;
+package com.binarysearch;
 
 /**
  * @author wangwei
@@ -59,7 +59,10 @@ public class _1011_CapacityToShipPakagesWithinDDays {
 
 
     /**
+     * 边界值二分搜索
      * 和 _875_KoKoEatingBnanas 思路一致，寻找左边界的二分查找
+     * 轮船载重能力越强，花费的时间越少，形成单调性，并且要求的是最小承重能力，限制量是时间，所以采用左边界二分搜索
+     * 【最小值】应该是重量【最大】的那个货物的重量，最大值是所有货物重量之和
      * 对于此题，承重能力的下界应该是所有货物中最大的那个，不然无法运送所有货物
      * 上界应该是，全部货物重量之和，一次全送完
      * @param weights
@@ -79,12 +82,14 @@ public class _1011_CapacityToShipPakagesWithinDDays {
             int mid = left + (right - left) / 2;
             // 当前承重能力下，能送完所有货物
             if (canFinishShip(weights, mid, D)) {
-                // 缩小上界
+                // 缩小上界，承重能力可以更低一些
                 right = mid;
+            // 运不完，承重能力不够，
             } else {
                 left = mid + 1;
             }
         }
+        // 一定存在解
         return left;
     }
 
