@@ -41,6 +41,7 @@ public class _516_LongestPalindromeSubseq {
 
     /**
      * 这个问题对 dp 数组的定义是：在子串 s[i..j] 中，最长回文子序列的长度为 dp[i][j]
+     * 那么最后要返回的是 dp[0][n-1]， 所以 是从 中间 往两边 递推，对于 dp[i][j] 要考虑 dp[i + 1][j - 1]
      *
      * 假设你知道了子问题 dp[i+1][j-1] 的结果（s[i+1..j-1] 中最长回文子序列的长度），
      * 你是否能想办法算出 dp[i][j] 的值（s[i..j] 中，最长回文子序列的长度）呢？
@@ -71,14 +72,17 @@ public class _516_LongestPalindromeSubseq {
     public int longestPalindromeSubseq(String s) {
         if (s == null || s.length() == 0) return 0;
         int n = s.length();
+        // dp[i][j] 表示 在子串 s[i..j] 中，最长回文子序列的长度
         int[][] dp = new int[n][n];
         // base case
         for (int i = 0; i < n; i++) {
             dp[i][i] = 1;
         }
         // 状态转移
+        // 注意倒着遍历
         for (int i = n - 1; i >= 0; --i) {
             for (int j = i + 1; j < n; j++) {
+                // 当前字符相等
                 if (s.charAt(i) == s.charAt(j))
                     // 它俩一定在最长回文子序列中
                     dp[i][j] = dp[i + 1][j - 1] + 2;
@@ -88,4 +92,8 @@ public class _516_LongestPalindromeSubseq {
         }
         return dp[0][n - 1];
     }
+
+    /**
+     * 方法二：将 s 翻转 得到 t， 求 s 和 t 的最长公共子序列，证明？ 略
+     */
 }

@@ -46,6 +46,8 @@ public class _1143_longestCommonSubsequence {
      * 最长公共子序列（Longest Common Subsequence，简称 LCS）
      * <p>
      * dp[i][j] 的含义是：对于 s1[0..i] 和 s2[0..j]，它们的 LCS 长度是 dp[i][j]
+     * dp[0][0] 表示 空 和 空 情况，不涉及有效字符
+     * 所以dp里面的下标代表的字符序号，而它在原串里面的索引应该是 序号-1
      * <p>
      * 我们专门让索引为 0 的行和列表示空串，dp[0][..] 和 dp[..][0] 都应该初始化为 0，这就是 base case。
      * 比如说，按照刚才 dp 数组的定义，dp[0][3]=0 的含义是：对于字符串 "" 和 "bab"，其 LCS 的长度为 0
