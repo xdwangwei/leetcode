@@ -31,6 +31,14 @@ import java.util.HashMap;
  * 数组非空，且长度不会超过 20 。
  * 初始的数组的和不会超过 1000 。
  * 保证返回的最终结果能被 32 位整数存下。
+ *
+ * 提示：
+ *
+ * 1 <= nums.length <= 20
+ * 0 <= nums[i] <= 1000
+ * 0 <= sum(nums[i]) <= 1000
+ * -1000 <= target <= 1000
+ *
  * <p>
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/target-sum
@@ -48,6 +56,8 @@ public class _494_TargetSum {
 
     /**
      * 回溯 O(2^N)
+     *
+     * 对于每一个数字来说，要么选择＋，要么选择负号
      * 相当于一颗完全二叉树
      * @param nums
      * @param i
@@ -97,6 +107,13 @@ public class _494_TargetSum {
      * 为什么呢？因为我们只不过恰好发现了重叠子问题，顺手用备忘录技巧给优化了，
      * 但是底层思路没有变，依然是暴力穷举的回溯算法，依然在遍历一棵二叉树。
      * 这只能叫对回溯算法进行了「剪枝」，提升了算法在某些情况下的效率，但算不上质的飞跃。
+     *
+     * 【注意】
+     * 这里的备忘录为什么用 map，不能用二维数组吗？int[idx][rest]
+     *
+     * 不可以：：因为回溯是可以路径回退的，也就是我可以先让和超出目标，然后后面数字取负号，再让它减小到目标
+     * 那么这样的话，这个memo[][]初始化时申请多大空间？idx最多是数组length，但是rest，对于回溯来说，它可能最大时全部元素和，最小是最大值的相反数，而且负数是没有索引的
+     * 因此，回溯法如果要使用备忘录，不能用二维数组！！！
      * @param args
      */
     // 看不懂就算了
@@ -134,7 +151,10 @@ public class _494_TargetSum {
      * 也就是把原问题转化成：
      * nums 中存在几个子集 A，使得 A 中元素的和为 (target + sum(nums)) / 2？、
      *
+     * 每个元素只可以用1次，所以这是一个0-1背包问题
      * 背包问题可先看 _416_
+     *
+     * 题目说了 nums 元素 都是 非负整数，target 可能为 负，所以 如果 sum(nums) < abs(target), 那么不可能
      * @param
      */
     public int findTargetSumWays2(int[] nums, int target) {
@@ -145,7 +165,7 @@ public class _494_TargetSum {
             sum += num;
         }
         // sum < target 不可能，要划分和为 (target + sum(nums)) / 2 的子集，这个数不能为奇数
-        if (sum < target || (sum + target & 1) == 1) return 0;
+        if (sum < Math.abs(target) || (sum + target & 1) == 1) return 0;
         return findSubSets(nums, (sum + target) / 2);
     }
     /**

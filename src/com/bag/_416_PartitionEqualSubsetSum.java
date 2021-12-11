@@ -1,5 +1,7 @@
 package com.bag;
 
+import java.util.Arrays;
+
 /**
  * @author wangwei
  * 2020/4/26 0:08
@@ -32,6 +34,31 @@ package com.bag;
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
 public class _416_PartitionEqualSubsetSum {
+
+    public boolean canPartition8(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return false;
+        }
+        int sum = Arrays.stream(nums).sum();
+        if (sum % 2 == 1) {
+            return false;
+        }
+        int len = nums.length, target = sum / 2;
+        boolean[][] dp = new boolean[len + 1][target + 1];
+        for (int i = 0; i <= len; ++i) {
+            dp[i][0] = true;
+        }
+        for (int i = 1; i <= len; ++i) {
+            for (int j = 1; j <= target; ++j) {
+                if (j >= nums[i - 1]) {
+                    dp[i][j] = dp[i - 1][j - nums[i - 1]] || dp[i - 1][j];
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[len][target];
+    }
 
     /**
      * 0-1 背包
@@ -113,11 +140,21 @@ public class _416_PartitionEqualSubsetSum {
      *
      * 可能你要说，这个dp[4]不是是在dp[6]之前更新的？它相对于dp[6]就是旧值啊
      *
-     * 注意我们这里的旧值不是谁先谁后更新的问题，dp[i-num]全部更新才是一个新的阶段，我们这里区分的阶段的新旧
+     * 注意我们这里的旧值不是谁先谁后更新的问题，dp[i--num]全部更新才是一个新的阶段，我们这里区分的阶段的新旧
      *
      * 也就是说，再 外循环 i 不变的情况下，dp[6]用到的dp[4]应该是在外循环 i-1的时候的dp[4]
      *
      * 如果正序，那么这个dp[4]会被改变，所以不是dp[6]需要的那个
+     *
+     * 比如 在二维情况下，对于
+     *      i = 1: a1  b1  c1  d1  e1  f1  g1  h1  j1  k1
+     *      i = 2: a2  b2  c2  d2  e2  f2  g2  h2  j2  k2
+     *      // dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i - 1]];
+     *      // 由于 i 维度的存在，更新 a2 ... 时，用到的都是 a1 b1 c1 等，
+     *      但是当i维度去掉后，正序遍历就无法保证这个机制，
+     *      比如 应该是 c e 得到 g， 然后 再 a b 得到 c，这样就能保证这一排值在同样的上一次状态下进行了迭代更新
+     *      如果是正序，那么 a b 得到 c， c e 得到 g，对于此时的g来说，这个 c 不是上一次的状态。
+     * 所以要倒序
      */
 
     public boolean canPartition2(int[] nums) {
