@@ -62,6 +62,7 @@ public class _337_HouseRobber3 {
     }
 
     /**
+     * 动态规划 + 备忘录，自顶向下记忆化搜索
      * 考虑抢劫每个节点
      */
     Map<TreeNode, Integer> memo = new HashMap<>();

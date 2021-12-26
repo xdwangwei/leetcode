@@ -6,22 +6,22 @@ import java.util.Arrays;
  * @author wangwei
  * 2020/7/21 18:07
  * <p>
- * 有 n 个气球，编号为0 到 n-1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
+ * 有 n 个气球，编号为0 到 n-1，每个气球上都标有一个数字，这些数字存在数组nums中。
  * <p>
- * 现在要求你戳破所有的气球。如果你戳破气球 i ，就可以获得 nums[left] * nums[i] * nums[right] 个硬币。 这里的 left 和 right 代表和 i 相邻的两个气球的序号。注意当你戳破了气球 i 后，气球 left 和气球 right 就变成了相邻的气球。
+ * 现在要求你戳破所有的气球。如果你戳破气球 i ，就可以获得nums[left] * nums[i] * nums[right]个硬币。这里的left和right代表和i相邻的两个气球的序号。注意当你戳破了气球 i 后，气球 left 和气球 right 就变成了相邻的气球。
  * <p>
  * 求所能获得硬币的最大数量。
  * <p>
  * 说明:
  * <p>
- * 你可以假设 nums[-1] = nums[n] = 1，但注意它们不是真实存在的所以并不能被戳破。
+ * 你可以假设nums[-1] = nums[n] = 1，但注意它们不是真实存在的所以并不能被戳破。
  * 0 ≤ n ≤ 500, 0 ≤ nums[i] ≤ 100
  * 示例:
  * <p>
  * 输入: [3,1,5,8]
  * 输出: 167
  * 解释: nums = [3,1,5,8] --> [3,5,8] -->   [3,8]   -->  [8]  --> []
- *      coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167
+ *    coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167
  * <p>
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/burst-balloons
@@ -47,31 +47,14 @@ public class _312_BurstBallons {
      */
 
     /**
+     * 动态规划 自顶向下 记忆化搜索
      * 这个动态规划问题和我们之前的动态规划系列文章相比有什么特别之处？为什么它比较难呢？
      * <p>
      * 原因在于，这个问题中我们每戳破一个气球nums[i]，得到的分数和该气球相邻的气球nums[i-1]和nums[i+1]是有相关性的。
      * <p>
      * 我们前文 动态规划套路框架详解 说过运用动态规划算法的一个重要条件：[子问题必须独立]。
      * 所以对于这个戳气球问题，如果想用动态规划，必须巧妙地定义dp数组的含义，避免子问题产生相关性，才能推出合理的状态转移方程。
-     */
-    public int maxCoins(int[] nums) {
-        int n = nums.length;
-        // 两端加入两个虚拟气球
-        int[] points = new int[n + 2];
-        points[0] = points[n + 1] = 1;
-        for (int i = 1; i <= n; i++) {
-            points[i] = nums[i - 1];
-        }
-        // 初始化备忘录
-        dict = new int[n + 2][n + 2];
-        for (int[] ints : dict) {
-            Arrays.fill(ints, -1);
-        }
-        // 我们要填满 1 到 n，因为solve是开区间，所以这里是 (0, n + 1)
-        return solve(points, 0, n + 1);
-    }
-
-    /**
+     *
      * 戳气球的操作会导致左右两个区间从不相邻变成相邻，使得后续操作难以处理。
      * 于是我们倒过来看这些操作，将全过程看作是【每次添加一个气球】。
      *
@@ -95,9 +78,25 @@ public class _312_BurstBallons {
      * 来源：力扣（LeetCode）
      * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      */
+    public int maxCoins(int[] nums) {
+        int n = nums.length;
+        // 两端加入两个虚拟气球
+        int[] points = new int[n + 2];
+        points[0] = points[n + 1] = 1;
+        for (int i = 1; i <= n; i++) {
+            points[i] = nums[i - 1];
+        }
+        // 初始化备忘录
+        dict = new int[n + 2][n + 2];
+        for (int[] ints : dict) {
+            Arrays.fill(ints, -1);
+        }
+        // 我们要填满 1 到 n，因为solve是开区间，所以这里是 (0, n + 1)
+        return solve(points, 0, n + 1);
+    }
 
     /**
-     * 自顶向下 记忆化搜索
+     *
      * solve(i,j) 表示将【开区间】(i,j)内的位置全部填满气球能够得到的最多硬币数
      */
     private int solve(int[] points, int left, int right) {
@@ -108,9 +107,11 @@ public class _312_BurstBallons {
         if (dict[left][right] != -1) return dict[left][right];
         // 选择一个位置插入第一个气球
         for (int mid = left + 1; mid < right; ++mid) {
+            // 这个气球是最后一个，那么和它相邻的左右气球就分别为未取到的左右边界
             int sum = points[left] * points[mid] * points[right];
             // 在这个位置插入所能获得的分数
             sum += solve(points, left, mid) + solve(points, mid, right);
+            // 在多个位置中做出最有益的选择
             dict[left][right] = Math.max(dict[left][right], sum);
         }
         return dict[left][right];
@@ -199,6 +200,34 @@ public class _312_BurstBallons {
             }
         }
         return dp[0][n + 1];
+    }
+
+    /**
+     * 复习算法小炒，重新写的代码，动态规划思路没变，只是 dp[i][j] 代表戳掉 闭区间[i,j]所有气球能够得到的最大金币
+     * @param nums
+     * @return
+     */
+    public int maxCoins8(int[] nums) {
+        int n = nums.length;
+        if (n == 1) {
+            return nums[0];
+        }
+        int[] vals = new int[n + 2];
+        vals[0] = vals[n + 1] = 1;
+        for (int i = 1; i <= n; ++i) {
+            vals[i] = nums[i - 1];
+        }
+        int[][] dp = new int[n + 2][n + 2];
+        for (int i = n; i >= 1; --i) {
+            for (int j = i; j <= n; ++j) {
+                for (int k = i; k <= j; ++k) {
+                    int temp = vals[k] * vals[i - 1] * vals[j + 1];
+                    temp += dp[i][k - 1] + dp[k + 1][j];
+                    dp[i][j] = Math.max(dp[i][j], temp);
+                }
+            }
+        }
+        return dp[1][n];
     }
 
 }

@@ -39,7 +39,9 @@ public class _123_BestTime2BuyAndSellStock3 {
      * 动态规划
      * <p>
      * 121题限制只能买1次，122题限制买无数次，这两种情况下k都可以被省略考虑
-     * 这道题需要需要k所有取值
+     * 188题需要需要k所有取值
+     *
+     * 这道题相当于 188题的特殊情况
      * <p>
      * 按最简单的动态规划的思路想，用 dp[i]表示前i天的最高收益，那么 dp[i+1] 怎么根据 dp[i] 求出来呢？
      * 我们注意到我们题目是求那么多天最多交易两次的最高收益，还有一个最多交易次数的变量，我们把它加到数组中再试一试。
@@ -52,8 +54,11 @@ public class _123_BestTime2BuyAndSellStock3 {
      * 第i天，最多交易k次，持有股票 的收益 来源于今天啥都不干 或 昨天不持有今天买入
      * 此时，因为今天买入，所以昨天最多交易k-1次
      * dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
+     *
+     * 因为一次交易是从买入股票开始，所以dp[x][k-1][y]只出现在当天持有股票的状态转移方程中
      * <p>
-     * 还记得前面总结的「穷举框架」吗？就是说我们必须穷举所有状态。其实我们之前的解法，都在穷举所有状态，只是之前的题目中 k 都被化简掉了。这道题由于没有消掉 k 的影响，所以必须要对 k 进行穷举：
+     * 还记得前面总结的「穷举框架」吗？就是说我们必须穷举所有状态。其实我们之前的解法，都在穷举所有状态，只是之前的题目中 k 都被化简掉了。
+     * 这道题由于没有消掉 k 的影响，所以必须要对 k 进行穷举：
      * <p>
      * int max_k = 2;
      * int[][][] dp = new int[n][max_k + 1][2];
@@ -113,6 +118,62 @@ public class _123_BestTime2BuyAndSellStock3 {
         }
         // 最后一天，全部交易完成，无剩余股票
         return dp[prices.length - 1][max_k][0];
+    }
+
+    /**
+     * 动态规划，复习算法小抄时自己写出来的
+     * @param prices
+     * @return
+     */
+    public int maxProfit8(int[] prices) {
+        int n = prices.length;
+        if (n == 1) {
+            return 0;
+        }
+        int k = 2;
+        int[][][] dp = new int[n][k + 1][2];
+        for (int j = 1; j <= k; ++j) {
+            // dp[0][j][0] = 0;
+            dp[0][j][1] = -prices[0];
+        }
+        for (int i = 1; i < n; ++i) {
+            dp[i][1][0] = Math.max(dp[i - 1][1][0], dp[i - 1][1][1] + prices[i]);
+            dp[i][1][1] = Math.max(dp[i - 1][1][1], -prices[i]);
+            dp[i][2][0] = Math.max(dp[i - 1][2][0], dp[i - 1][2][1] + prices[i]);
+            dp[i][2][1] = Math.max(dp[i - 1][2][1], dp[i - 1][1][0] - prices[i]);
+        }
+        return dp[n - 1][k][0];
+    }
+
+    /**
+     * 动态规划状态压缩，复习算法小抄时自己写出来的
+     * @param prices
+     * @return
+     */
+    public int maxProfit9(int[] prices) {
+        int n = prices.length;
+        if (n < 2) {
+            return 0;
+        }
+        // int k = 2;
+        // int[][][] dp = new int[n][k + 1][2];
+        // for (int j = 1; j <= k; ++j) {
+        //     // dp[0][j][0] = 0;
+        //     dp[0][j][1] = -prices[0];
+        // }
+        int dp_i_1_0 = 0, dp_i_2_0 = 0, dp_i_1_1 = -prices[0], dp_i_2_1 = -prices[0];
+        for (int i = 1; i < n; ++i) {
+            int temp = dp_i_1_0;
+            // dp[i][1][0] = Math.max(dp[i - 1][1][0], dp[i - 1][1][1] + prices[i]);
+            dp_i_1_0 = Math.max(dp_i_1_0, dp_i_1_1 + prices[i]);
+            // dp[i][1][1] = Math.max(dp[i - 1][1][1], -prices[i]);
+            dp_i_1_1 = Math.max(dp_i_1_1, -prices[i]);
+            // dp[i][2][0] = Math.max(dp[i - 1][2][0], dp[i - 1][2][1] + prices[i]);
+            dp_i_2_0 = Math.max(dp_i_2_0, dp_i_2_1 + prices[i]);
+            // dp[i][2][1] = Math.max(dp[i - 1][2][1], dp[i - 1][1][0] - prices[i]);
+            dp_i_2_1 = Math.max(dp_i_2_1, temp - prices[i]);
+        }
+        return dp_i_2_0;
     }
 
     /**
@@ -212,4 +273,5 @@ public class _123_BestTime2BuyAndSellStock3 {
         // 最大值只发生在不持股的时候，因此来源有 3 个：j = 0 ,j = 2, j = 4
         return Math.max(0, Math.max(dp[1], dp[3]));
     }
+
 }

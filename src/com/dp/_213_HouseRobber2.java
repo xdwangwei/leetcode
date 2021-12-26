@@ -35,6 +35,22 @@ public class _213_HouseRobber2 {
      *
      * 只要比较情况二和情况三就行了，因为这两种情况对于房子的选择余地比情况一大呀，
      *      房子里的钱数都是非负数，所以选择余地大，最优决策结果肯定不会小。
+     *
+     * 如果偷窃了第一间房屋，则不能偷窃最后一间房屋，因此偷窃房屋的范围是第一间房屋到最后第二间房屋；
+     * 如果偷窃了最后一间房屋，则不能偷窃第一间房屋，因此偷窃房屋的范围是第二间房屋到最后一间房屋。
+     *
+     * 假设数组 nums 的长度为 n。如果不偷窃最后一间房屋，则偷窃房屋的下标范围是 [0, n-2]；
+     * 如果不偷窃第一间房屋，则偷窃房屋的下标范围是 [1, n-1]。
+     * 在确定偷窃房屋的下标范围之后，即可用第 198 题的方法解决。
+     * 对于两段下标范围分别计算可以偷窃到的最高总金额，其中的最大值即为在 n 间房屋中可以偷窃到的最高总金额。
+     *
+     * 假设偷窃房屋的下标范围是 [start,end]，用 dp[i] 表示在下标范围[i,end] 内可以偷窃到的最高总金额，那么就有如下的状态转移方程：
+     * dp[i] = max(dp[i+2]+nums[i],dp[i+1])
+     *
+     * 作者：LeetCode-Solution
+     * 链接：https://leetcode-cn.com/problems/house-robber-ii/solution/da-jia-jie-she-ii-by-leetcode-solution-bwja/
+     * 来源：力扣（LeetCode）
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
      * @param nums
      * @return
      */
@@ -45,7 +61,30 @@ public class _213_HouseRobber2 {
         else return Math.max(dp(nums, 0, n - 2), dp(nums, 1, n - 1));
     }
 
+    /**
+     * 动态规划
+     * 每间房屋，可抢可不抢
+     * @param nums
+     * @param start
+     * @param end
+     * @return
+     */
     private int dp(int[] nums, int start, int end) {
+        int[] dp = new int[end + 1 + 2];
+        for (int i = end; i >= start; --i) {
+            dp[i] = Math.max(dp[i + 1], nums[i] + dp[i + 2]);
+        }
+        return dp[start];
+    }
+
+    /**
+     * 动态规划状态压缩
+     * @param nums
+     * @param start
+     * @param end
+     * @return
+     */
+    private int dp1(int[] nums, int start, int end) {
         int dp_i = 0, dp_i_1 = 0, dp_i_2 = 0;
         for (int i = end; i >= start; --i) {
             // 抢劫这家就得去下下家，或者不抢劫这家就直接去下一家

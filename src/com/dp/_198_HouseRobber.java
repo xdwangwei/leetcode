@@ -50,7 +50,6 @@ public class _198_HouseRobber {
      */
     public int rob1(int[] nums) {
         // return dp1(nums, 0);
-
         memo = new int[nums.length];
         Arrays.fill(memo, -1);
         return dp2(nums, 0);

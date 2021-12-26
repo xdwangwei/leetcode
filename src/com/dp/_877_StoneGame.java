@@ -1,7 +1,5 @@
 package com.dp;
 
-import com.array._204_CountPrimes;
-
 /**
  * @author wangwei
  * 2020/7/24 15:23
@@ -216,6 +214,7 @@ public class _877_StoneGame {
         }
         // 倒着遍历数组，只需填满右上三角
         for (int i = n - 1; i >= 0; --i) {
+            // j = i 作为base case已经处理过
             for (int j = i + 1; j < n; j++) {
                 // 先手选择最左边或最右边的分数
                 int left = piles[i] + dp[i + 1][j].sec;

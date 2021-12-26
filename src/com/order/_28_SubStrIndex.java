@@ -52,6 +52,37 @@ public class _28_SubStrIndex {
     }
 
     /**
+     * 暴力搜索
+     * @param haystack
+     * @param needle
+     * @return
+     */
+    public int strStr(String haystack, String needle) {
+        int m = haystack.length(), n = needle.length();
+        if (n == 0) {
+            return 0;
+        }
+        if (m < n) {
+            return -1;
+        }
+        // 对于 hatstack每一个位置
+        for (int i = 0; i < m - n + 1; ++i) {
+            int j = 0;
+            // 从它开始，逐个去匹配needle字符
+            for (j = 0; j < n; ++j) {
+                if (haystack.charAt(i + j) != needle.charAt(j)) {
+                    break;
+                }
+            }
+            // needle完全匹配上
+            if (j == n) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * KMP算法
      *
      * @param haystack
