@@ -90,6 +90,32 @@ public class _55_JumpGame {
         return end == 0;
     }
 
+    /**
+     * 复习算法小抄，动态规划
+     * dp[i]表示从i位置能够跳到末尾
+     * @param nums
+     * @return
+     */
+    public boolean canJump8(int[] nums) {
+        if (nums.length == 1) {
+            return true;
+        }
+        boolean[] dp = new boolean[nums.length];
+        dp[nums.length - 1] = true;
+        for (int i = nums.length - 2; i >= 0; --i) {
+            if (nums[i] == 0) {
+                continue;
+            }
+            for (int j = nums[i]; j >= 1; --j) {
+                if (i + j >= nums.length || dp[i + j]) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[0];
+    }
+
 
     public static void main(String[] args) {
         _55_JumpGame obj = new _55_JumpGame();

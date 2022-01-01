@@ -41,6 +41,7 @@ import java.util.Arrays;
 public class _435_NoOverlappingIntevals {
 
     /**
+     * 贪心
      * 什么是贪心选择性质呢，简单说就是：每一步都做出一个局部最优的选择，最终的结果就是全局最优。
      * 注意哦，这是一种特殊性质，其实只有一小部分问题拥有这个性质。
      * 有关贪心算法介绍：https://mp.weixin.qq.com/s/NH8GFMcRm5UK0HmVhdNjMQ

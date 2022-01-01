@@ -33,6 +33,7 @@ import java.util.Arrays;
 public class _452_MinimumArrows2BurstBallons {
 
     /**
+     * 贪心
      * 什么是贪心选择性质呢，简单说就是：每一步都做出一个局部最优的选择，最终的结果就是全局最优。
      * 注意哦，这是一种特殊性质，其实只有一小部分问题拥有这个性质。
      * 有关贪心算法介绍：https://mp.weixin.qq.com/s/NH8GFMcRm5UK0HmVhdNjMQ
@@ -51,7 +52,8 @@ public class _452_MinimumArrows2BurstBallons {
      * 由于我们事先排了序，不难发现所有与 x 相交的区间必然会与 x 的end相交；
      * 如果一个区间不想与 x 的end相交，它的start必须要大于（或等于）x 的end，
      *
-     * 再看这个问题，不就是求最多的不重复的区间数吗？？？，无非就是在这里，边界算相交(射箭嘛，一碰上，肯定两个都破了)
+     * 再看这个问题，不就是求最多的不重复的区间数吗？？？，
+     * 无非就是在这里，边界算相交(射箭嘛，一碰上，肯定两个都破了)
      *
      */
 

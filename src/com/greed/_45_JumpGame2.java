@@ -1,5 +1,7 @@
 package com.greed;
 
+import java.util.Arrays;
+
 /**
  * @author wangwei
  * 2020/4/20 19:02
@@ -27,7 +29,7 @@ package com.greed;
 public class _45_JumpGame2 {
 
     /**
-     * 贪婪算法
+     * 贪心算法
      *
      * 在位置i，可以有nums[i]种跳法，
      * 如果某一个作为 起跳点 的格子可以跳跃的距离是 3，那么表示后面 3 个格子都可以作为 起跳点
@@ -42,9 +44,9 @@ public class _45_JumpGame2 {
      * 用 i 表示当前位置，curEnd表示当次跳跃包含的所有起跳点中最后一个起跳点
      *
      * 这里要注意一个细节，就是 for 循环中，i < nums.length - 1，少了末尾。
-     * 因为开始的时候边界是第 00 个位置，steps 已经加 11 了。
-     * 如下图，2 3 1 1 2 2 2如果最后一步刚好跳到了末尾，此时 steps 其实不用加 11 了。
-     * 如果是 i < nums.length，i 遍历到最后的时候，会进入 if 语句中，steps 会多加 11。
+     * 因为开始的时候边界是第 0 个位置，steps 已经加 1 了。
+     * 如下图，2 3 1 1 2 2 2如果最后一步刚好跳到了末尾，此时 steps 其实不用加 1 了。
+     * 如果是 i < nums.length，i 遍历到最后的时候，会进入 if 语句中，steps 会多加 1。
      *
      * @param nums
      * @return
@@ -68,6 +70,33 @@ public class _45_JumpGame2 {
         }
         // 因为题目假设一定能到达最后，所以最终返回step即可
         return steps;
+    }
+
+    /**
+     * 复习算法小抄，动态规划
+     * dp[i]表示从i位置跳到末尾所需要的最小步数
+     * @param nums
+     * @return
+     */
+    public int jump8(int[] nums) {
+        int n = nums.length;
+        if (n == 1) {
+            return 0;
+        }
+        int[] dp = new int[n];
+        Arrays.fill(dp, n);
+        dp[n - 1] = 0;
+        for (int i = n - 2; i >= 0; --i) {
+            for (int j = nums[i]; j >= 1; --j) {
+                if (i + j >= n) {
+                    dp[i] = 1;
+                    break;
+                } else {
+                    dp[i] = Math.min(dp[i], dp[i + j] + 1);
+                }
+            }
+        }
+        return dp[0];
     }
 
 }

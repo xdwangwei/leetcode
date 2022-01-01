@@ -26,6 +26,11 @@ import java.util.Comparator;
  */
 public class _56_MergeIntevals {
 
+    /**
+     * 区间问题，排序排序排序
+     * @param intervals
+     * @return
+     */
     public int[][] merge(int[][] intervals) {
         if (intervals == null || intervals.length < 2) return intervals;
         // 选择按区间的 start 排序
