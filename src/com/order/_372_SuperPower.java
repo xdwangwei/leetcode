@@ -31,7 +31,8 @@ public class _372_SuperPower {
      *
      *   (a * b) % k = (a % k)(b % k) % k
      *   a = Ak+B, b = Ck+D, ab = ACk^2 + ADk+ BCk + BD
-     *   ab % k = BD % k, B = a % k, D = b % k
+     *   所以 ab % k = BD % k,
+     *   而 B = a % k, D = b % k
      *   所以 ab % k = (a % k)(b % k) % k
      *
      * @param a
@@ -47,26 +48,6 @@ public class _372_SuperPower {
         // a ^ b % k
         int k = 1337;
         return superPowAndMod(a, deque, k);
-    }
-
-    /**
-     *
-     * 如果只计算 a^[a,a,a,,a]，为方便计算，将数组转为双端列表[]
-     * @param a
-     * @param deque
-     * @return
-     */
-    private int superPow(int a, Deque<Integer> deque) {
-        // base case 递归出口，a^[] = 1
-        if (deque.isEmpty()) return 1;
-        // 取出最后一个数
-        int last = deque.pollLast();
-        // a^[1,5,6,4]  =  a^4  * (a^[1,5,6])^10  递归
-        // 将原问题化简，缩小规模递归求解
-        int part1 = power(a, last);
-        int part2 = power(superPow(a, deque), 10);
-        // 合并出结果
-        return part1 * part2;
     }
 
     /**
@@ -91,6 +72,49 @@ public class _372_SuperPower {
         return (part1 * part2) % k;
     }
 
+    /**
+     * 高效计算 a的n次方 % k
+     * ab % k = (a % k)(b % k) % k
+     * ==>  a^n % k = (a % k)^n % k
+     * @param a
+     * @param n
+     * @return
+     */
+    private int powerAndMod(int a, int n, int k) {
+        // base case, 1 % k = k
+        if (n == 0) return 1;
+        // a^n % k = (a % k)^n % k
+        a = a % k;
+        // n是偶数
+        if (n % 2 == 0)
+            return (powerAndMod(a * a, n / 2, k)) % k;
+            // n是奇数
+        else
+            return (powerAndMod(a * a, n / 2, k) * a) % k;
+    }
+
+
+
+    /**
+     *
+     * 如果只计算 a^[a,a,a,,a]，为方便计算，将数组转为双端列表[]
+     * @param a
+     * @param deque
+     * @return
+     */
+    private int superPow(int a, Deque<Integer> deque) {
+        // base case 递归出口，a^[] = 1
+        if (deque.isEmpty()) return 1;
+        // 取出最后一个数
+        int last = deque.pollLast();
+        // a^[1,5,6,4]  =  a^4  * (a^[1,5,6])^10  递归
+        // 将原问题化简，缩小规模递归求解
+        int part1 = power(a, last);
+        int part2 = power(superPow(a, deque), 10);
+        // 合并出结果
+        return part1 * part2;
+    }
+
 
     /**
      * 高效计算a的n次方
@@ -106,28 +130,7 @@ public class _372_SuperPower {
             return power(a * a, n / 2);
         // n是奇数
         else
-            return power(a * a, (n - 1) / 2) * a;
-    }
-
-    /**
-     * 高效计算 a的n次方 % k
-     * ab % k = (a % k)(b % k) % k
-     * a^n % k = (a % k)^n % k
-     * @param a
-     * @param n
-     * @return
-     */
-    private int powerAndMod(int a, int n, int k) {
-        // base case, 1 % k = k
-        if (n == 0) return 1;
-        // a^n % k = (a % k)^n % k
-        a = a % k;
-        // n是偶数
-        if (n % 2 == 0)
-            return (powerAndMod(a * a, n / 2, k)) % k;
-            // n是奇数
-        else
-            return (powerAndMod(a * a, (n - 1) / 2, k) * a) % k;
+            return power(a * a, n / 2) * a;
     }
 
 }

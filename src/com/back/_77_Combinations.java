@@ -10,7 +10,7 @@ import java.util.List;
  *
  * 示例:
  *
- * 输入: n = 4, k = 2
+ * 输入:n = 4, k = 2
  * 输出:
  * [
  *   [2,4],
@@ -30,6 +30,15 @@ public class _77_Combinations {
 
     private List<List<Integer>> res = new ArrayList<>();
 
+    /**
+     * 回溯，
+     *
+     * 每次选择一个数字，接下来从剩下的里面的选，但是为了避免重复，比如第一次选择3，第二次选择1，和第一次选择1，第二次选择3，
+     * 每次往后进行选择，比如本次选择3，下次就从3之后开始选择
+     * @param n
+     * @param k
+     * @return
+     */
     public List<List<Integer>> combine(int n, int k) {
         if (n < k) return res;
         // 选择列表 1,3,4,...,n

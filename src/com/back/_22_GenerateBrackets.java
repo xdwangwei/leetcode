@@ -151,6 +151,59 @@ public class _22_GenerateBrackets {
         backTrack4(letter + ")", left, right - 1);
     }
 
+    /**
+     * 回顾算法小抄
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis8(int n) {
+        res = new ArrayList<>();
+        backTrack8("", 0, 0, n);
+        return res;
+    }
+
+    /**
+     * 回顾算法小抄
+     * @param temp
+     * @param left 已有的左括号数量
+     * @param right 已有的右括号数量
+     * @param n    n对
+     */
+    private void backTrack8(String temp, int left, int right, int n) {
+        if (left < right || left > n) {
+            return;
+        }
+        if (left == n && right == n) {
+            res.add(temp);
+        }
+        backTrack8(temp + "(", left + 1, right, n);
+        backTrack8(temp + ")", left, right + 1, n);
+    }
+
+    /**
+     * 回顾算法小抄
+     *
+     * 可以看成这样 (有p对括号的子串)有q对括号的子串，且 p + q = n - 1,  0 <= p <= n - 1
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis9(int n) {
+        List<String> res = new ArrayList<>();
+        if (n == 0) {
+            res.add("");
+        }
+        for (int i = 0; i < n; i++) {
+            List<String> leftPairs = generateParenthesis9(i);
+            for (String leftPair : leftPairs) {
+                List<String> rightPairs = generateParenthesis9(n - i - 1);
+                for (String rightPair : rightPairs) {
+                    res.add("(" + leftPair + ")" + rightPair);
+                }
+            }
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         _22_GenerateBrackets t = new _22_GenerateBrackets();
         List<String> list = t.solution4(3);

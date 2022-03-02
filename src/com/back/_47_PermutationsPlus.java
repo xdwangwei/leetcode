@@ -38,13 +38,13 @@ public class _47_PermutationsPlus {
         Arrays.sort(nums);
         // 用数组标记，list.contains()效率较低
         boolean[] visited = new boolean[nums.length];
-        backTrack(res, nums, 0, new ArrayList<>(), visited);
+        backTrack(res, nums, new ArrayList<>(), visited);
         return res;
     }
 
-    private void backTrack(List<List<Integer>> res, int[] nums, int n, List<Integer> tempList, boolean[] visited) {
+    private void backTrack(List<List<Integer>> res, int[] nums, List<Integer> tempList, boolean[] visited) {
         // 出口，所有元素均出现
-        if (n == nums.length) {
+        if (tempList.size() == nums.length) {
             res.add(new ArrayList<>(tempList));
             return;
         }
@@ -58,7 +58,7 @@ public class _47_PermutationsPlus {
             tempList.add(nums[i]);
             visited[i] = true;
             // 进入下一层
-            backTrack(res, nums, n + 1, tempList, visited);
+            backTrack(res, nums, tempList, visited);
             // 撤销选择
             tempList.remove(tempList.size() - 1);
             visited[i] = false;

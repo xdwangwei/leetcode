@@ -30,25 +30,27 @@ public class _46_Permutations {
 
     /**
      * 回溯法
+     *
+     * 每次选择一个数字，接下来从剩下的数字中进行选择。因为是排列，所以先选1后选3 和 先选3后选1是两种情况，不用对回溯进行特殊处理
      * @param nums
      * @return
      */
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         if (nums == null || nums.length == 0) return res;
-        backTrack(res, nums, new ArrayList<>(), 0);
+        backTrack(res, nums, new ArrayList<>());
 
         // 在第一种回溯中，backTrack中排除重复元素是 tempList.contains()时间复杂度是O(n)
         // 我们可以借助一个数组来表示它是否已访问，
         // boolean[] visited = new boolean[nums.length];
-        // backTrack(res, nums, 0, new ArrayList<>(), visited);
+        // backTrack(res, nums, new ArrayList<>(), visited);
         return res;
     }
 
 
-    private void backTrack(List<List<Integer>> res, int[] nums, List<Integer> tempList, int n){
+    private void backTrack(List<List<Integer>> res, int[] nums, List<Integer> tempList){
         // 出口
-        if (n == nums.length){
+        if (tempList.size() == nums.length){
             res.add(new ArrayList<>(tempList));
             return;
         }
@@ -59,15 +61,15 @@ public class _46_Permutations {
             // 做选择
             tempList.add(num);
             // 进入下一层
-            backTrack(res, nums, tempList, n + 1);
+            backTrack(res, nums, tempList);
             // 回溯选择
             tempList.remove(tempList.size() - 1);
         }
     }
 
-    private void backTrack(List<List<Integer>> res, int[] nums, int n, List<Integer> tempList, boolean[] visited) {
+    private void backTrack(List<List<Integer>> res, int[] nums, List<Integer> tempList, boolean[] visited) {
         // 出口
-        if (n == nums.length) {
+        if (tempList.size() == nums.length) {
             res.add(new ArrayList<>(tempList));
             return;
         }
@@ -78,7 +80,7 @@ public class _46_Permutations {
             tempList.add(nums[i]);
             visited[i] = true;
             // 进入下一层
-            backTrack(res, nums, n + 1, tempList, visited);
+            backTrack(res, nums, tempList, visited);
             // 撤销选择
             tempList.remove(tempList.size() - 1);
             visited[i] = false;

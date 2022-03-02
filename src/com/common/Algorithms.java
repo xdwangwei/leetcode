@@ -194,5 +194,6 @@ public class Algorithms {
         System.out.println(binarySearch(arr, -1));
         System.out.println(binarySearch(arr, 3245));
         System.out.println(binarySearch(arr, 53));
+
     }
 }

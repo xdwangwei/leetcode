@@ -5,6 +5,36 @@ package com.order;
  * @Author: wangwei
  * @Description:
  * @Time: 2019/11/22 周五 23:39
+ *
+ * 4. 寻找两个正序数组的中位数
+ * 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+ *
+ * 算法的时间复杂度应该为 O(log (m+n)) 。
+ *
+ *
+ *
+ * 示例 1：
+ *
+ * 输入：nums1 = [1,3], nums2 = [2]
+ * 输出：2.00000
+ * 解释：合并数组 = [1,2,3] ，中位数 2
+ * 示例 2：
+ *
+ * 输入：nums1 = [1,2], nums2 = [3,4]
+ * 输出：2.50000
+ * 解释：合并数组 = [1,2,3,4] ，中位数 (2 + 3) / 2 = 2.5
+ *
+ *
+ *
+ *
+ * 提示：
+ *
+ * nums1.length == m
+ * nums2.length == n
+ * 0 <= m <= 1000
+ * 0 <= n <= 1000
+ * 1 <= m + n <= 2000
+ * -106 <= nums1[i], nums2[i] <= 106
  **/
 public class _04_MedianOfTwoSortedArray {
 
@@ -24,7 +54,7 @@ public class _04_MedianOfTwoSortedArray {
     // 将一个集合划分为两个长度相等的子集，其中一个子集中的元素总是大于另一个子集中的元素
     // 让我们在任一位置 i 将 A 划分成两个部分 A[0],A[1]...A[i-1]  A[i],A[i+1],...A[m-1]
     // 同样, 在任一位置 j 将 B 划分成两个部分 B[0],B[1]...B[j-1]  B[j],B[j+1],...B[n-1]
-    // 将 left_A 和 left_B放入一个集合，并将 right_A 和 right_B}放入另一个集合。
+    // 将 left_A 和 left_B放入一个集合，并将 right_A 和 right_B 放入另一个集合。
     // 如果我们可以确认：len(left_part)=len(right_part)  max(left_part)≤min(right_part)
     // 那么我们已经将 {A,B} 中的所有元素划分为相同长度的两个部分，且其中一部分中的元素总是大于另一部分中的元素
     // median = max(left_part)+min(right_part) / 2 左边最右面那个和右边最左面那个的均值

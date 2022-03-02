@@ -44,7 +44,7 @@ import java.util.*;
  * 链接：https://leetcode-cn.com/problems/sliding-puzzle
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
-public class _733_SlidingPuzzle {
+public class _773_SlidingPuzzle {
 
     /**
      * BFS
@@ -88,7 +88,7 @@ public class _733_SlidingPuzzle {
             }
         }
         // 建立邻接元素位置表
-        int[][] neighbor = new int[][]{
+        int[][] neighbor = {
             {1, 3},
             {0, 2, 4},
             {1, 5},
@@ -146,6 +146,15 @@ public class _733_SlidingPuzzle {
         array[i] = array[j];
         array[j] = temp;
         return new String(array);
+    }
+
+    public static void main(String[] args) {
+        String s = Arrays.deepToString(new int[][]{{2,3,5}, {1,3,5}});
+        System.out.println(s);
+
+        String test = "abcd";
+        test.toCharArray()[0] = 'f';
+        System.out.println(test);
     }
 
 }

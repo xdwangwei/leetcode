@@ -1,4 +1,4 @@
-package com.array;
+package com.design;
 
 import java.util.Random;
 
@@ -35,6 +35,7 @@ public class _398_RandomPiclIndex {
     }
 
     /**
+     * 在所有值为target的元素对应的下标中随机选择一个即可
      * 仍然是蓄水池抽样问题，比如要找5，原数组中不知道有多少个5，要保证随机取出一个的概率相等
      * 则 对于第i个元素，以 1 / i 的概率选择它
      * @param target

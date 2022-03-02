@@ -1,4 +1,4 @@
-package com.list;
+package com.design;
 
 import com.common.ListNode;
 

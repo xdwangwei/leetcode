@@ -7,7 +7,7 @@ import java.util.List;
  * @author wangwei
  * 2020/7/25 21:37
  *
- * 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+ * 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
  *
  * 说明：解集不能包含重复的子集。
  *
@@ -34,6 +34,24 @@ public class _78_Subsets {
 
     private List<List<Integer>> res = new ArrayList<>();
 
+    /**
+     * 回溯
+     *
+     *
+     *
+     *                               []
+     *                 /             |            \
+     *              /                |             \
+     *            /                  |              \
+     *           [1]                [2]             [3]
+     *      /         \              |
+     *   [1,2]      [1,3]         [2,3]
+     *    |
+     * [1,2,3]
+     *
+     * @param nums
+     * @return
+     */
     public List<List<Integer>> subsets(int[] nums) {
         // 选择列表 1,3,4,...,n
         // 第一次选择从nums[0]开始
@@ -63,5 +81,46 @@ public class _78_Subsets {
             // 撤销选择
             list.remove(list.size() - 1);
         }
+    }
+
+    /**
+     * 递归
+     *
+     * 如果 A = subset([1,2]) ，那么：
+     *
+     * subset([1,2,3])
+     *
+     * = A + [A[i].add(3) for i = 1..len(A)]
+     *
+     * base： subsets([]) = []
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> subsets2(int[] nums) {
+        return subset(nums, nums.length - 1);
+    }
+
+    private List<List<Integer>> subset(int[] nums, int idx) {
+        List<List<Integer>> res = new ArrayList<>();
+        // 空数组，返回空集
+        if (idx == -1) {
+            res.add(new ArrayList<>());
+            return res;
+        }
+
+        // 要求 subsets([1,2,3])，先求subsets([1,2])
+        List<List<Integer>> subs = subset(nums, idx - 1);
+        // subset([1,2,3]) = A + [A[i].add(3) for i = 1..len(A)]
+        res.addAll(subs);
+        // 注意引用，
+        for (List<Integer> set : subs) {
+            // 这里需要重建对象（复制一份新的）
+            ArrayList<Integer> temp = new ArrayList<>(set);
+            // [A[i].add(3) for i = 1..len(A)]
+            temp.add(nums[idx]);
+            res.add(temp);
+        }
+
+        return res;
     }
 }
