@@ -1,7 +1,9 @@
 package com.interval;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author wangwei
@@ -55,5 +57,30 @@ public class _56_MergeIntevals {
         }
         // res中只有前index个区间有效
         return Arrays.copyOf(res, index + 1);
+    }
+
+    /**
+     * 复习算法小抄
+     * @param intervals
+     * @return
+     */
+    public int[][] merge8(int[][] intervals) {
+        Arrays.sort(intervals, Comparator.comparingInt(o -> o[0]));
+        List<int[]> res = new ArrayList<>();
+        int n = intervals.length;
+        res.add(intervals[0]);
+        for (int i = 1; i < n; ++i) {
+            int prevMaxRight = res.get(res.size() - 1)[1];
+            int curLeft = intervals[i][0];
+            int curRight = intervals[i][1];
+            // 相交，令加一个区间
+            if (curLeft > prevMaxRight) {
+                res.add(intervals[i]);
+            // 覆盖情况，更新 res.getLast() 的有边界，相当于这些全部合并到 当前部分的第一个区间中去
+            } else if (curRight > prevMaxRight) {
+                res.get(res.size() - 1)[1] = curRight;
+            }
+        }
+        return res.toArray(new int[res.size()][]);
     }
 }

@@ -62,4 +62,122 @@ public class _1288_RemoveCoveredIntervals {
         }
         return count;
     }
+
+    /**
+     * 第二种写法
+     * 起点升序，起点相同时终点降序，这样就满足 l[j] >= l[i] (j > i), 只需要判断 r[i] 和 r[j]
+     * @param intervals
+     * @return
+     */
+    public int removeCoveredIntervals2(int[][] intervals) {
+        // 起点升序，起点相同终点降序
+        Arrays.sort(intervals, (o1, o2) -> o1[0] == o2[0] ? o2[1] - o1[1] : o1[0] - o2[0]);
+        int n = intervals.length;
+        int ans = n;
+        // 右边界最大值
+        int maxRight = intervals[0][1];
+        for (int i = 1; i < n; i++) {
+            // 当前区间右边界
+            int curRight = intervals[i][1];
+            // 当前区间被覆盖
+            if (curRight <= maxRight) {
+                ans--;
+            } else {
+                // 相交，更新右边界
+                maxRight = curRight;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 第三种，起点升序，起点相同时，终点也升序
+     * 这种情况下就会出现 intv[i] 覆盖 intv[i - 1] 或者 intv[i] 覆盖 intv[i + 1]两种覆盖形式，主要是区分这两种覆盖和相交情况
+     *
+     * 可以先看下面那种错误写法
+     *
+     * 不太好描述，就是下面那种写法会在某个“巧合”下使得那个if成立，多加了一次count，原因是prevLeft一直在更新，和prevRight不同步，
+     * 现在这样写是 让这两个 同步更新（看起来不同步，但是在prevRight变化的过程中，prevLeft是不变的，怎么说的，这只能说明这几个区间左端点相同，相当于pervleft也在更新），
+     * @param intervals
+     * @return
+     */
+    public int removeCoveredIntervals3(int[][] intervals) {
+        // 起点升序，终点升序
+        Arrays.sort(intervals, (o1, o2) -> o1[0] == o2[0] ? o1[1] - o2[1] : o1[0] - o2[0]);
+        // 排序之后，区间起点满足递增关系
+        int len = intervals.length;
+        // 第一个区间
+        int prevLeft = intervals[0][0], prevRight = intervals[0][1];
+        // 被覆盖的区间数
+        int count = 0;
+        // 从第二个区间开始
+        for (int i = 1; i < len; ++i) {
+            int left = intervals[i][0];
+            int right = intervals[i][1];
+            // 当前区间被上一个区间【覆盖】 ①
+            if (right <= prevRight) {
+                count++;
+            } else {
+                // 当前区间终点比上一个大，区分到底是 相交 还是 覆盖
+                // 如果起点相同，说明当前区间【覆盖】了上一个  ②
+                if (left == prevLeft) {
+                    count++;
+                    // 更新右边界
+                    prevRight = right;
+                } else {
+                    // 相交情况
+                    // 更新左边界
+                    prevLeft = left;
+                    // 更新右边界
+                    prevRight = right;
+                }
+            }
+        }
+        // 总区间数 - 被覆盖的区间数
+        return len - count;
+    }
+
+    /**
+     * 第三种，起点升序，起点相同时，终点也升序 ×××
+     *
+     * 【错误写法】，一直更新 prevLeft
+     *
+     * prevLeft一直在更新，也就是说，它的确保存的是前一个区间的左边界，但是prevRight相当于是之前所有区间的右边界中最大的那个，
+     * 所以我那个if左边界相等count自增，这个判断成立的时候，并不一定是当前覆盖上一个，因为这个prevRight是个历史值
+     *
+     * 可以先看下面那种错误写法
+     * @param intervals
+     * @return
+     */
+    public int removeCoveredIntervals4(int[][] intervals) {
+        // 起点升序，终点升序
+        Arrays.sort(intervals, (o1, o2) -> o1[0] == o2[0] ? o1[1] - o2[1] : o1[0] - o2[0]);
+        // 排序之后，区间起点满足递增关系
+        int len = intervals.length;
+        // 第一个区间
+        int prevLeft = intervals[0][0], prevRight = intervals[0][1];
+        // 被覆盖的区间数
+        int count = 0;
+        // 从第二个区间开始
+        for (int i = 1; i < len; ++i) {
+            int left = intervals[i][0];
+            int right = intervals[i][1];
+            // 当前区间被上一个区间【覆盖】
+            if (right <= prevRight) {
+                count++;
+            } else {
+                // 当前区间终点比上一个大
+                // 如果起点相同，说明当前区间【覆盖】了上一个
+                if (left == prevLeft) {
+                    count++;
+                }
+                // 更新右边界
+                prevRight = right;
+            }
+            // 更新左边界，所有左断点是递增，所以随便更新
+            prevLeft = left;
+        }
+        // 总区间数 - 被覆盖的区间数
+        return len - count;
+    }
 }

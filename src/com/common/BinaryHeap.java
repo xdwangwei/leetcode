@@ -116,9 +116,10 @@ public class BinaryHeap<AnyType extends Comparable<? super AnyType>> {
         // 暂时放在原最后一个位置的后面
         int hole = ++currentSize;
         // 一路向上，找到不破坏堆序的位置停下
-        // array[0] = x; 如果新加入的元素是新的最小值，某一时刻hole必然会为1
-        // 要打破条件 x.compareTo(array[1/2])，所以提前把x赋给array[0]
-        // 或者也可以在for循环内部对此情况单独判断
+        // 如果 x 某个中间值，那么 在某个位置 必然会打破 x.compareTo(array[hole / 2]) < 0，
+        // 如果新加入的元素x是新的最小值，那么某一时刻hole必然会为1
+        // 要打破条件 x.compareTo(array[1/2] = array[0]) < 0，所以提前把x赋给array[0]; array[0] = x;
+        // 否则就需要在for循环内部对此情况单独判断
         for (array[0] = x; x.compareTo(array[hole / 2]) < 0; hole /= 2) {
             array[hole] = array[hole / 2];
         }

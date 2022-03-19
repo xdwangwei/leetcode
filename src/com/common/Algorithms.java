@@ -104,26 +104,38 @@ public class Algorithms {
                 swap(arr, i, j);
             }
         }
-        // 结束时，i == j，此时已经完成[0:i]都<=pivot,[i:end]都>=pivot
+        // 结束时，i == j，此时已经完成[start:i]都<=pivot,[i:end]都>=pivot
         // 但是pivot还没放放置到合适位置，需要再完成一次交换，因为nums[i]已经<=pivot了，所以直接交换这两个不会破坏
         swap(arr, start, i);
         return i;
     }
 
 
-
-
+    /**
+     * 第三种partition，也是一对交换
+     * 枢轴元素取最左，但还是从左指针开始扫描，注意 是 先 自增i，再比较(最左边元素已保存，不用比较)，也就是 arr[++i] < pivot
+     *                 那么对应 j 指针 就是 arr[--j] > pivot，但是刚开始时 j = j = high + 1，这样保证 先减一后j就是最右边元素，否则会被漏掉
+     *
+     * 注意退出条件 和 最后 的交换
+     * @param arr
+     * @param low
+     * @param high
+     * @return
+     */
     private static int partition3(int[] arr, int low, int high) {
         // 哨兵节点
         int pivot = arr[low];
         int i = low, j = high + 1;
+        // 注意退出条件
         while (true) {
             // i 右移
+            // 保证 nums[lo..i] 都小于 pivot
             while (arr[++i] < pivot) {
                 // 递减数组，直接退出
                 if (i == high) break;
             }
             // j 左移
+            // 保证 nums[j..hi] 都大于 pivot
             while (arr[--j] > pivot) {
                 // 正序数组，j 退回到0
                 if (j == low) break;
