@@ -1,4 +1,4 @@
-package com.array;
+package com.window;
 
 import java.util.Stack;
 
@@ -193,7 +193,8 @@ public class _42_TrappingRainWater {
             l_max = Math.max(l_max, height[left]);
             r_max = Math.max(r_max, height[right]);
 
-            // ans += min(l_max, r_max) - height[i]
+            // 核心是 ans += min(l_max, r_max) - height[i]
+            // 所以自然是哪边小就哪边可靠
             if (l_max < r_max) {
                 ans += l_max - height[left];
                 left++;

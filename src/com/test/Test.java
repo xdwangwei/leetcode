@@ -8,6 +8,8 @@ import sun.misc.BASE64Encoder;
  */
 public class Test {
 
+
+
     public static void main(String[] args) {
 
         BASE64Encoder encoder = new BASE64Encoder();
@@ -19,5 +21,9 @@ public class Test {
         System.out.println(payload);
         // eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
         System.out.println(encoder.encode(payload.getBytes()));
+
+
+        Test obj = new Test();
+
     }
 }

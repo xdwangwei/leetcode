@@ -8,7 +8,7 @@ import java.util.Stack;
  *
  * 实现一个基本的计算器来计算一个简单的字符串表达式的值。
  *
- * 字符串表达式可以包含左括号 ( ，右括号 )，加号 + ，减号 -，非负整数和空格  。
+ * 字符串表达式可以包含左括号(，右括号 )，加号+，减号-，非负整数和空格。
  *
  * 示例 1:
  *
@@ -193,7 +193,7 @@ public class _224_BasicCaculator {
      *      遇到(开始递归，遇到)结束递归：
      *
      * 需要补充的就是，遇到 ( 开始递归，遇到 ) 结束递归并返回，
-     * 返回上一层之后我们应该从 ) 之后的字符开始，继续往后处理，
+     * 【!!!重点!!!】返回上一层之后我们应该从 ) 之后的字符开始，继续往后处理，
      * 所以这里应该设置一个参数作为起始位置
      *      可以是引用传值的方式，
      *      也可以计算递归处理的这段子串的长度，然后递归返回后下标后移指定长度，继续处理
@@ -209,6 +209,12 @@ public class _224_BasicCaculator {
      *
      * @param s
      * @return
+     */
+    /**
+     *
+     * 不能for循环一进来就 if (c == ' ') continue; 这样写，如果表达式是这这种形式 "5 ",那么for循环直接结束了，那个5没处理
+     * 所以注意下面的判断条件，这样也可以跳过空格，并且能正确处理5
+     *      if ((!Character.isDigit(c) && c != ' ') || i == s.length() - 1) {
      */
     public int advancedCalculator(String s, int[] arr) {
         // 存放添加了符号的所有操作数，最后累加得到返回值
@@ -230,6 +236,10 @@ public class _224_BasicCaculator {
                 // 从 ( 的下一个位置开始
                 ++arr[0];
                 num = advancedCalculator(s, arr);
+                // 这里不能直接 stack.push(num);
+                // 必须根据括号部分表达式前面的符号决定最终入栈什么数字
+                // 比如 -(expr) 就应该入栈 -num
+                // 所以计算括号就跟计算连续数字是一个道理，只得到num的值，知道遇到下一个符号，表示数字部分结束，结合开始的符号决定入栈的值
             }
             // 如果是+-，或者是最后一个字符，都代表着上一个操作数的结束
             // 注意这里不能用 else if, 就是为了处理遇到最后一个字符，一般是操作数
@@ -265,6 +275,7 @@ public class _224_BasicCaculator {
         }
         return res;
     }
+
 
     public static void main(String[] args) {
         _224_BasicCaculator obj = new _224_BasicCaculator();

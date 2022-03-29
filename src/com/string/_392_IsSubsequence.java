@@ -107,8 +107,7 @@ public class _392_IsSubsequence {
             // 太小，扩大左边界
             if (list.get(mid) < target) {
                 lo = mid + 1;
-            }
-            else {
+            } else {
                 hi = mid;
             }
         }
