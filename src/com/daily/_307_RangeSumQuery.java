@@ -4,8 +4,6 @@ package com.daily;
  * @author wangwei
  * @date 2022/4/4 10:36
  *
- * TODO 线段树
- *
  * 307. 区域和检索 - 数组可修改
  * 给你一个数组 nums ，请你完成两类查询。
  *

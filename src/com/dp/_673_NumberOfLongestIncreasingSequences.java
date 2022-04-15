@@ -4,7 +4,7 @@ package com.dp;
  * @author wangwei
  * @version 1.0.0
  * @date 2021/9/20 18:36
- * @description: TODO
+ * @description: TODO 贪心+前缀和+二分 / 贪心+树状数组 ， 看不太明白
  *
  * 673. 最长递增子序列的个数
  * 给定一个未排序的整数数组，找到最长递增子序列的个数。
