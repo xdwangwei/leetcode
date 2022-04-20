@@ -59,7 +59,7 @@ public class _05_LongestPalindrome {
         String res = "";
         boolean[][] dp = new boolean[n][n];
         for(int i = 0 ;i < n; i++){
-            for(int j = 0; j <= i ;j ++){
+            for(int j = 0; j <= i ; j++){
                 // i - j <2 是为了处理 i == j 和 i == j + 1,否则j+1,i-1会直接错过
                 if(s.charAt(i) == s.charAt(j) && ( i - j < 2 || dp[j+1][i-1]))
                     dp[j][i] = true;
