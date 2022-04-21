@@ -1,5 +1,8 @@
 package com.list;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author wangwei
  * 2022/4/20 12:41
@@ -63,7 +66,69 @@ package com.list;
  */
 public class _388_LongestAbsoluteFilePath {
 
+    /**
+     *  dir
+     *  ⟶ subdir1
+     *  ⟶ ⟶ file1.ext
+     *  ⟶ ⟶ subsubdir1
+     *  ⟶ subdir2
+     *  ⟶ ⟶ subsubdir2
+     *  ⟶ ⟶ ⟶ file2.ext
+     *
+     * 可以看作一个树状结构
+     * 对于 subdir1 和 subdir2 来说，前缀都是 dir
+     * 对于 file1.ext和subsubdir1来说，前缀都是 dir/subdir1
+     * 通过每行开始的 \t 的个数，就能知道这个文件或文件夹在第几层，
+     * 那么对于同一层的文件来说，它的最终长度就是它的前缀(相同的上一层)长度+/+自己的路径长度
+     * 所以，我们需要保存不同层的前缀长度，需要一个 (层数，前缀长) 的结构，所以使用 hashmap
+     * 比如 dir，第0层，前缀长度就是上一层的长度，为0
+     * 比如 subdir1，第1层，前缀长度就是第0层的长度，也就是 dir的长度3
+     * 比如 file1.ext，第2层，前缀长度就是第1层的长度，也就是 subdir1前缀长度+它自身的长度
+     * 那么 对于 第 count 层的文件，它的前缀长度就是 它的上一层的长度 + / + 它自身的长度
+     *      最后组成路径时不包含 \t，所以去掉 \t 的长度
+     *      并且，如果当前是一个文件，那么还要用它的绝对路径长度去更新res，绝对路径长度是包含\n\t这些符号的，所以应该是 上一层长度+本行长度
+     *
+     *  并且，每个文件或取的上一层的路径长度一定要是最近的上一层路径长度
+     *  比如
+     *  dir
+     *  ⟶ dir1
+     *  ⟶ ⟶ file1.ext
+     *  ⟶ subdir2
+     *  ⟶ ⟶ abc.txt
+     *  对于abc.txt来说，它在第2层，它的上一层应该是 dir/subdir2, 长度是 11
+     *  但是，第1层还有一个dir1，所以在计算abc.txt长度时，不能出现 dir/dir1/abc.txt
+     *  幸运的是，对于上面这种输入格式，每个文件的上一行一定是它严格所属的上一级目录信息，这样，当处理上一行时，它会将之前记录的同层文件长度的值覆盖掉，保证abc.txt获取到的上一层值时最新值
+     */
+
+    /**
+     * 通过 input.split("\\n")得到一共多少行，即多少个问价夹或文件信息
+     * 对每一行，
+     */
     public int lengthLongestPath(String input) {
-        return 0;
+        // 保存不同层当前目录长度，对于它的多个下一层文件或文件夹来说，其公共前缀相同
+        Map<Integer, Integer> map = new HashMap<>();
+        // 每一行是一个文件路径
+        String[] split = input.split("\\n");
+        int res = 0;
+        for (String line: split) {
+            // 当前行长度
+            int lineLen = line.length();
+            int count = 0;
+            // 统计 count 的个数，当前文件处于哪一层
+            for (int i = 0; i < lineLen && line.charAt(i) == '\t'; ++i) {
+                count++;
+            }
+            // 它的上一层的路径长度
+            int lastDepthLen = map.getOrDefault(count - 1, 0);
+            // 拼接它之后，当层的路径长度，不包含 \t
+            map.put(count, lastDepthLen + lineLen - count);
+            // 如果是一个文件，那么用它的绝对路径长度来更新res
+            if (line.contains(".")) {
+                // 绝对路径包含 前面的\t
+                // 本来是上一层\当前文件长，这里不用加 \ 的长度1是因为 lineLen里面包含了当前行最后一个换行符，相当于加上了前面的\
+                res = Math.max(res, lastDepthLen + lineLen);
+            }
+        }
+        return res;
     }
 }
