@@ -39,6 +39,7 @@ public class _461_HammingDistance {
      * @return
      */
     public int hammingDistance(int x, int y) {
+
         int xor = x ^ y;
         int n = 0;
         while (xor != 0) {
