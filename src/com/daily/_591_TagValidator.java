@@ -1,9 +1,12 @@
 package com.daily;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 /**
  * @author wangwei
  * @date 2022/5/2 20:57
- * @description: _591_TagValidator TODO
+ * @description: _591_TagValidator
  * 591. 标签验证器
  * 给定一个表示代码片段的字符串，你需要实现一个验证器来解析这段代码，并返回它是否合法。合法的代码片段需要遵守以下的所有规则：
  *
@@ -82,7 +85,132 @@ package com.daily;
  */
 public class _591_TagValidator {
 
+
+    /**
+     * 简单模拟题，。
+     * 由于标签具有 [最先开始的标签最后结束] 的特性，因此我们可以考虑使用一个栈存储当前开放的标签。
+     *
+     * 除此之外，我们还需要考虑 cdata 以及一般的字符，二者都可以使用 遍历 + 判断 的方法直接进行验证。
+     *
+     * 我们可以对字符串 code 进行一次遍历。在遍历的过程中，根据遍历到位置 i 的当前字符，采取对应的判断：
+     *
+     * 如果当前的字符为<，那么需要考虑下面的四种情况：
+     *
+     *      如果下一个字符为 /，那么说明我们遇到了一个结束标签。我们需要定位下一个 > 的位置 j，此时 code[i+2..j−1] 就是该结束标签的名称。
+     *      我们需要判断该名称与当前栈顶的名称是否匹配，如果匹配，说明名称的标签已经闭合，我们需要将当前栈顶的名称弹出。
+     *      同时根据规则 1，我们需要保证整个 code 被闭合标签包围，因此如果栈中已经没有标签，但是 j 并不是 code 的末尾，那么说明后续还会有字符，它们不被闭合标签包围。
+     *
+     *      如果下一个字符为 !，那么说明我们遇到了一个cdata，我们需要继续往后读 7 个字符，判断其是否为 [CDATA[。
+     *      在这之后，我们定位下一个]]> 的位置 j，此时 code[i+9..j−1] 就是 cdata 中的内容，它不需要被解析，所以我们也不必进行任何验证。
+     *      需要注意的是，根据规则 1，栈中需要存在至少一个开放的标签。
+     *
+     *      如果下一个字符为大写字母，那么说明我们遇到了一个开始标签。我们需要定位下一个 > 的位置 j，此时 code[i+2..j−1] 就是该开始标签的名称。
+     *      我们需要判断该名称是否恰好由 1 至 9 个大写字母组成，如果是，说明该标签合法，我们需要将该名称放入栈顶。
+     *
+     *      除此之外，如果不存在下一个字符，或者下一个字符不属于上述三种情况，那么 code 是不合法的。
+     *
+     * 如果当前的字符为其它字符，那么根据规则 1，栈中需要存在至少一个开放的标签。
+     *
+     * 在遍历完成后，我们还需要保证此时栈中没有任何（还没有结束的）标签。
+     *
+     * 作者：LeetCode-Solution
+     * 链接：https://leetcode-cn.com/problems/tag-validator/solution/biao-qian-yan-zheng-qi-by-leetcode-solut-fecy/
+     * 来源：力扣（LeetCode）
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     * @param code
+     * @return
+     */
     public boolean isValid(String code) {
-        return false;
+
+        // 利用 栈 结构
+        Deque<String> stack = new ArrayDeque<>();
+        int j = 0;
+
+        while (j < code.length()) {
+            char c = code.charAt(j);
+            // tag 开始 或者 <![CDATA
+            if (c == '<') {
+                // 对于 '<' 或者 '<A></A><'这种，最后一个字符是一个 <
+                if (j == code.length() - 1) {
+                    return false;
+                }
+                // < 开头，如果是 <![CDATA
+                if (code.charAt(j + 1) == '!') {
+                    // 有效串只能包裹在 tag 中
+                    if (stack.isEmpty()) {
+                        return false;
+                    }
+                    // <! 开头，后面又不是 [CDATA[，无效
+                    if (!code.startsWith("[CDATA[", j + 2)) {
+                        return false;
+                    }
+                    // <![CDATA 的结尾位置
+                    int index = code.indexOf("]]>", j + 9);
+                    // 不存在对应收尾，无效
+                    if (index < 0) {
+                        return false;
+                    }
+                    // 跳过这部分
+                    j = index + 3;
+                // < 开头的 闭合 tag
+                } else if (code.charAt(j + 1) == '/') {
+                    // 闭合tag的完整 tagName </tagname>
+                    int index = code.indexOf(">", j + 2);
+                    if (index < 0) {
+                        return false;
+                    }
+                    // 必须要有与之匹配的 打开tag，
+                    if (stack.isEmpty() || !code.substring(j + 2, index).equals(stack.peek())) {
+                        return false;
+                    }
+                    // 抵消掉
+                    stack.pop();
+                    // 跳过
+                    j = index + 1;
+                    // [!!!如果此时栈空了，也就是外围再没有包裹的tag了，除非已经处理完了，否则就是类似<A></A>aaa这种，无效]
+                    if (stack.isEmpty() && j < code.length()) {
+                        return false;
+                    }
+                // < 开头的 开tag，<tag>
+                } else {
+                    // 得到tagname
+                    int index = code.indexOf(">", j + 1);
+                    if (index < 0) {
+                        return false;
+                    }
+                    String tagname = code.substring(j + 1, index);
+                    // tagname必须满足长度在1-9，全部是大写字母
+                    if (tagname.length() < 1 || tagname.length() > 9) {
+                        return false;
+                    }
+                    for (int k = 0; k < tagname.length(); ++k) {
+                        if (!Character.isUpperCase(tagname.charAt(k))) {
+                            return false;
+                        }
+                    }
+                    // 入栈
+                    stack.push(tagname);
+                    // 跳过 <tagname>
+                    j = index + 1;
+                }
+            } else {
+                // 对于 < 以外的其他字符，只能 是 在 tag 的包裹中，否则无效
+                if (stack.isEmpty()) {
+                    return false;
+                }
+                // 一次性跳过这些字符 <A>abcdeft sfaf sfasf  sfa</A>
+                while (j < code.length() && code.charAt(j) != '<') {
+                    j++;
+                }
+            }
+        }
+        // 最后必须完美抵消，不然会有 <A> <B><C></C></B> 这种无效情况漏掉
+        return stack.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("<<<[[[]]>".indexOf("[[["));
+        _591_TagValidator obj = new _591_TagValidator();
+        System.out.println(obj.isValid("<DIV>This is the first line <![CDATA[<div>]]></DIV>"));
     }
 }

@@ -3,7 +3,7 @@ package com.daily;
 /**
  * @author wangwei
  * @date 2022/4/30 18:06
- * @description: _427_ConstructQuadTree TODO
+ * @description: _427_ConstructQuadTree
  *
  * 427. 建立四叉树
  * 给你一个 n * n 矩阵 grid ，矩阵由若干 0 和 1 组成。请你用四叉树表示该矩阵 grid 。
@@ -136,9 +136,9 @@ public class _427_ConstructQuadTree {
         /**
          * 为每一个指定范围的方格 建立一个对应的 Node 节点
          * @param grid
-         * @param x1
+         * @param x1 左上角
          * @param y1
-         * @param x2
+         * @param x2 右下角
          * @param y2
          * @return
          */
@@ -169,6 +169,75 @@ public class _427_ConstructQuadTree {
             Node bottomRight = dfs(grid, x1 + n / 2, y1 + n / 2, x2, y2);
             // 当前方格，肯定不是叶子节点，
             return new Node(true, false, topLeft, topRight, bottomLeft, bottomRight);
+        }
+
+
+        /**
+         * 我们可以对方法一中暴力判定某一部分是否均为 0 或 1 的代码进行优化。
+         *
+         * 具体地，【当某一部分均为 0 时，它的和为 0；某一部分均为 1 时，它的和为这一部分的面积大小。】
+         * 因此我们可以使用二维前缀和（参考「304. 二维区域和检索 - 矩阵不可变」）进行优化。
+         * 我们可以与处理出数组 grid 的二维前缀和，这样一来，当我们需要判定某一部分是否均为 0 或 1 时，可以在 O(1) 的时间内得到这一部分的和，从而快速地进行判断。
+         *
+         * 作者：LeetCode-Solution
+         * 链接：https://leetcode-cn.com/problems/construct-quad-tree/solution/jian-li-si-cha-shu-by-leetcode-solution-gcru/
+         * 来源：力扣（LeetCode）
+         * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+         * @param grid
+         * @return
+         */
+        public Node construct2(int[][] grid) {
+            int n = grid.length;
+            int[][] pre = new int[n + 1][n + 1];
+            // 计算以 [i,j] 为 右下角顶点的 二维数组前缀和
+            for (int i = 1; i <= n; ++i) {
+                for (int j = 1; j <= n; ++j) {
+                    pre[i][j] = pre[i - 1][j] + pre[i][j - 1] - pre[i - 1][j - 1] + grid[i - 1][j - 1];
+                }
+            }
+            return dfs2(grid, pre, 0, 0, n - 1, n - 1);
+        }
+
+        /**
+         * 优化 判断网络所有元素 是否相同 部分代码
+         * @param grid
+         * @param pre
+         * @param x1
+         * @param y1
+         * @param x2
+         * @param y2
+         * @return
+         */
+        private Node dfs2(int[][] grid, int[][] pre, int x1, int y1, int x2, int y2) {
+            // 判断当前网格元素是否全部相同
+            int total = getSum(pre, x1, y1, x2, y2);
+            if (total == 0) {
+                return new Node(false, true);
+            } else if (total == (x2 - x1 + 1) * (x2 - x1 + 1)) {
+                return new Node(true, true);
+            }
+            // 否则分为四个小方格，递归得到每个小方格对应的Node，拼凑得到当前方格，注意坐标计算
+            int n = x2 - x1 + 1;
+            Node topLeft = dfs2(grid, pre, x1, y1, x1 + n / 2 - 1, y1 + n / 2 - 1);
+            Node topRight = dfs2(grid, pre, x1, y1 + n / 2, x1 + n / 2 - 1, y2);
+            Node bottomLeft = dfs2(grid, pre, x1 + n / 2, y1, x2, y1 + n / 2 - 1);
+            Node bottomRight = dfs2(grid, pre, x1 + n / 2, y1 + n / 2, x2, y2);
+            // 当前方格，肯定不是叶子节点，
+            return new Node(true, false, topLeft, topRight, bottomLeft, bottomRight);
+        }
+
+        /**
+         * 二维网格左上角和右下角前缀和的差
+         * 注意 这里 前缀和顶点取值，画一下
+         * @param pre
+         * @param r0
+         * @param c0
+         * @param r1
+         * @param c1
+         * @return
+         */
+        public int getSum(int[][] pre, int r0, int c0, int r1, int c1) {
+            return pre[r1 + 1][c1 + 1] - pre[r1 + 1][c0] - pre[r0][c1 + 1] + pre[r0][c0];
         }
     }
 }
