@@ -1,6 +1,7 @@
 package com.test;
 
-import sun.misc.BASE64Encoder;
+
+import java.util.Base64;
 
 /**
  * @author wangwei
@@ -12,7 +13,8 @@ public class Test {
 
     public static void main(String[] args) {
 
-        BASE64Encoder encoder = new BASE64Encoder();
+
+        Base64.Encoder encoder = Base64.getEncoder();
         String header = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
         System.out.println(header);
         // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9

@@ -1,6 +1,6 @@
 package com.string;
 
-import javafx.util.Pair;
+import com.common.Pair;
 
 import java.util.*;
 

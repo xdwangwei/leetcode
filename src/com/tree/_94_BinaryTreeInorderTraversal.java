@@ -1,7 +1,7 @@
 package com.tree;
 
+import com.common.Pair;
 import com.common.TreeNode;
-import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
