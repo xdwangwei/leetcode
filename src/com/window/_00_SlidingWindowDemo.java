@@ -17,7 +17,7 @@ public class _00_SlidingWindowDemo {
     /*
     int left = 0, right = 0;
 
-    while (right < s.size()) {`
+    while (right < s.size()) {
         // 增大窗口
         window.add(s[right]);
         right++;

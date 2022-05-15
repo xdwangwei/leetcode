@@ -117,4 +117,59 @@ public class _567_PermutationInString {
         }
         return false;
     }
+
+    public boolean checkInclusion2(String s1, String s2) {
+        if (s2.length() < s1.length()) return false;
+        // 窗口中应该包含哪些字符，及其个数
+        HashMap<Character, Integer> need = new HashMap<>();
+        // 窗口中包含的字符，及其个数
+        HashMap<Character, Integer> window = new HashMap<>();
+        // 窗口中包含的满足要求的字符个数
+        int valid = 0;
+
+        // 统计需要出现的字符和个数
+        for (int i = 0; i < s1.length(); ++i) {
+            need.put(s1.charAt(i), need.getOrDefault(s1.charAt(i), 0) + 1);
+        }
+
+        // 滑动窗口
+        int left = 0, right = 0;
+
+        while (right < s2.length()) {
+            char c = s2.charAt(right);
+            // 扩大窗口右边界
+            right++;
+
+            // 更新窗口内数据
+            // 他在窗口出现次数加1
+            window.put(c, window.getOrDefault(c, 0) + 1);
+            // 如果他的出现次数达到了s2中的次数
+            // 那么当前窗口内满足要求的字符数加1
+            if (window.get(c).intValue() == need.get(c).intValue())
+                valid++;
+
+            // 因为寻找的是s1的排列，所以窗口大小应该保持和s1的长度一样
+            // 缩小窗口
+            while (right - left >= s1.length()) {
+                // 如果此时窗口的合法字符数达到要求
+                // 说明未包含其他字符，此时的窗口代表的子串就是s2的一个排列
+                if (valid == need.size()) return true;
+
+                // 当前窗口最左边的字符
+                char d = s2.charAt(left);
+                // 扩大窗口左边界，缩小窗口
+                left++;
+                // 更新窗口内一系列数据
+                // 如果这个字符是需要包含的，那就更新窗口中的数据
+                if (need.containsKey(d)) {
+                    // 如果这个字符在窗口中的出现次数已经达到要求了
+                    if (need.get(d).intValue() == window.get(d).intValue())
+                        valid--; // 窗口内的有效字符数减1
+                    // 这个字符出现次数减1
+                    window.put(d, window.get(d) - 1);
+                }
+            }
+        }
+        return false;
+    }
 }
