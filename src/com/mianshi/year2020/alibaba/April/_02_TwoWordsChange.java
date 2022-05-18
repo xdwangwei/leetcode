@@ -1,6 +1,7 @@
 package com.mianshi.year2020.alibaba.April;
 
-import javafx.util.Pair;
+
+import com.common.Pair;
 
 import java.util.*;
 
