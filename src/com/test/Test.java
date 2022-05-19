@@ -7,5 +7,8 @@ package com.test;
  */
 public class Test {
 
-
+    public static void main(String[] args) {
+        InterfaceTest obj = new InterfaceTestImpl("zhangsan", 99, 88);
+        System.out.println(obj.finalScore());
+    }
 }
