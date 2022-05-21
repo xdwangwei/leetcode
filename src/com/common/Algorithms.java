@@ -1,6 +1,7 @@
 package com.common;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * @author wangwei
@@ -149,6 +150,40 @@ public class Algorithms {
         // j会从最右边一直向左走到0，此时只能交换0 0，才能保证数组不改变
         swap(arr, low, j);
         return j;
+    }
+
+    Random random = new Random();
+
+    /**
+     *
+     * 快速排序，partition过程
+     * 以nums[right]为pivot，返回j，保证 nums[left, j] 都 < pivot=nums[right]
+     * @param nums
+     * @param low
+     * @param high
+     * @return
+     */
+    private int randomPartition(int[] nums, int low, int high) {
+        if (low == high) return low;
+        // 避免最坏时间复杂度，先随机选择一个位置和 预定的pivot元素位置交换
+        int randIndex = low + random.nextInt(high - low + 1);
+        swap(nums, randIndex, high);
+
+        // 选取最右边元素为pivot，j用于顺序扫描当前范围内的全部元素
+        // i 用于保证 nums[low, i]位置元素都 满足 <= pivot
+        // 也就是 每一次 nums[j] < pivot ，就把nums[j]交换到i位置去，保证<pivot的元素全部放置在左边部分
+        int pivot = nums[high], i = low - 1, j = low;
+        while (j <= high) {
+            // 每一次 nums[j] < pivot ，就把nums[j]交换到i位置去，保证<pivot的元素全部放置在左边部分
+            if (nums[j] < pivot) {
+                swap(nums, ++i, j);
+            }
+            ++j;
+        }
+        // 把pivot放置在正确位置
+        swap(nums, ++i, high);
+        // nums[low, i]位置 都满足 <= pivot
+        return i;
     }
 
 

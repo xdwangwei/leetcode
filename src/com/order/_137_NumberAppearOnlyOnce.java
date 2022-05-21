@@ -1,13 +1,15 @@
-package com.offerassult;
+package com.order;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author wangwei
  * @date 2022/5/9 16:13
- * @description: _004_NumberPresentOnlyOnce
+ * @description: _137_NumberPresentOnlyOnce
  *
- * 剑指 Offer II 004. 只出现一次的数字
+ * 剑指 137. 只出现一次的数字
  * 给你一个整数数组 nums ，除某个元素仅出现 一次 外，其余每个元素都恰出现 三次 。请你找出并返回那个只出现了一次的元素。
  *
  *
@@ -35,7 +37,7 @@ import java.util.*;
  *
  * 注意：本题与主站 137 题相同：https://leetcode-cn.com/problems/single-number-ii/
  */
-public class _004_NumberAppearOnlyOnce {
+public class _137_NumberAppearOnlyOnce {
 
 
     /**
@@ -282,7 +284,7 @@ public class _004_NumberAppearOnlyOnce {
     }
 
     public static void main(String[] args) {
-        _004_NumberAppearOnlyOnce obj = new _004_NumberAppearOnlyOnce();
+        _137_NumberAppearOnlyOnce obj = new _137_NumberAppearOnlyOnce();
         obj.singleNumber(new int[]{2, 2, 3, 2});
         System.out.println(Integer.bitCount(Integer.MIN_VALUE));
     }
