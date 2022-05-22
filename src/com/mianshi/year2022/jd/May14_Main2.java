@@ -1,4 +1,4 @@
-package com.mianshi.year2022.jd.May14;
+package com.mianshi.year2022.jd;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -42,7 +42,7 @@ import java.util.Scanner;
  * 样例输出
  * 6 5 3 2 1 4
  */
-public class Main2 {
+public class May14_Main2 {
 
 
     public static void main(String[] args) {

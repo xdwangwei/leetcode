@@ -1,4 +1,4 @@
-package com.mianshi.year2022.jd.May14;
+package com.mianshi.year2022.jd;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -8,7 +8,7 @@ import java.util.Scanner;
  * @date 2022/5/14 19:37
  * @description: Main1
  */
-public class Main1 {
+public class May14_Main1 {
 
     /**
      *  信息在传递之前需要经过一些加密算法才能由信道进行传递。小明设计了一套新的加密算法，该算法如下：
