@@ -1,11 +1,11 @@
-package com.daily;
+package com.offerassult;
 
 /**
  * @author wangwei
  * @date 2022/5/5 10:14
  * @description: _713_SubarrayProductLessThanK
  *
- * 713. 乘积小于 K 的子数组
+ * offer assult 009. 乘积小于 K 的子数组
  * 给你一个整数数组 nums 和一个整数 k ，请你返回子数组内所有元素的乘积严格小于 k 的连续子数组的数目。
  *
  *
@@ -27,7 +27,7 @@ package com.daily;
  * 1 <= nums[i] <= 1000
  * 0 <= k <= 106
  */
-public class _713_SubarrayProductLessThanK {
+public class _009_SubarrayProductLessThanK {
 
 
     /**

@@ -1,10 +1,10 @@
-package com.window;
+package com.offerassult;
 
 /**
  * @author wangwei
  * 2020/7/29 9:49
  *
- * 209. 长度最小的子数组
+ * offer assult 008. 长度最小的子数组
  * 给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的 连续 子数组，并返回其长度。如果不存在符合条件的子数组，返回 0。
  *
  *
@@ -15,7 +15,7 @@ package com.window;
  * 解释：子数组 [4,3] 是该条件下的长度最小的子数组。
  *
  */
-public class _209_MinimumSizeSubarraySum {
+public class _008_MinimumSizeSubarraySum {
 
     /**
      * 滑动窗口
@@ -32,11 +32,11 @@ public class _209_MinimumSizeSubarraySum {
      * 链接：https://leetcode.cn/problems/minimum-size-subarray-sum/solution/chang-du-zui-xiao-de-zi-shu-zu-by-leetcode-solutio/
      * 来源：力扣（LeetCode）
      * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-     * @param s
+     * @param target
      * @param nums
      * @return
      */
-    public int minSubArrayLen(int s, int[] nums) {
+    public int minSubArrayLen(int target, int[] nums) {
         int left = 0, right = 0;
         // 最终结果，初始化一个不可能结果
         int len = nums.length + 1;
@@ -49,7 +49,7 @@ public class _209_MinimumSizeSubarraySum {
             sum += nums[right++];
 
             // 判断缩小左窗口
-            while (sum >= s) {
+            while (sum >= target) {
                 // 更新结果集
                 len = Math.min(len, right - left);
                 // if (right - left < len) {

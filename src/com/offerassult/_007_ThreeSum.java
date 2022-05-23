@@ -1,17 +1,15 @@
-package com.array;
+package com.offerassult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static java.util.Objects.hash;
 
 /**
  * @Author: wangwei
  * @Description:
  * @Time: 2019/12/1 周日 10:39
  *
- * 15. 三数之和
+ * offer auuslt 007. 三数之和
  * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
  *
  * 注意：答案中不可以包含重复的三元组。
@@ -37,7 +35,7 @@ import static java.util.Objects.hash;
  * 0 <= nums.length <= 3000
  * -105 <= nums[i] <= 105
  **/
-public class _15_ThreeSum {
+public class _007_ThreeSum {
 
     /**
      * 排序+双指针
