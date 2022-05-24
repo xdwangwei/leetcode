@@ -156,7 +156,7 @@ public class _523_ContinuousSubarraySum {
             if (map.containsKey(mod) && i - map.get(mod) >= 2) {
                 return true;
             }
-            // 更新，记录最近的前缀和%k=mod的位置是i
+            // 更新，记录第一次的前缀和%k=mod的位置是i
             map.put(mod, i);
         }
         // 返回

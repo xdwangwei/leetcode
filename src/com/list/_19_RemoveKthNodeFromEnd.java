@@ -6,10 +6,49 @@ import com.common.ListNode;
  * @Author: wangwei
  * @Description: 删除链表的倒数第 n 个节点，并且返回链表的头结点
  * @Time: 2019/12/11 周三 00:40
+ *
+ * 19. 删除链表的倒数第 N 个结点
+ * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+ *
+ *
+ *
+ * 示例 1：
+ *
+ *
+ * 输入：head = [1,2,3,4,5], n = 2
+ * 输出：[1,2,3,5]
+ * 示例 2：
+ *
+ * 输入：head = [1], n = 1
+ * 输出：[]
+ * 示例 3：
+ *
+ * 输入：head = [1,2], n = 1
+ * 输出：[1]
+ *
+ *
+ * 提示：
+ *
+ * 链表中结点的数目为 sz
+ * 1 <= sz <= 30
+ * 0 <= Node.val <= 100
+ * 1 <= n <= sz
+ *
+ *
+ * 进阶：你能尝试使用一趟扫描实现吗？
  **/
 public class _19_RemoveKthNodeFromEnd {
-	
-	public ListNode solution1(ListNode head, int k) {
+
+
+	/**
+	 * 方法一：两次扫描
+	 * 第一次扫描：计算出链表长度，从而得到倒数第k是第几个节点
+	 * 第二次扫描：完成第n-k个节点的移除
+	 * @param head
+	 * @param k
+	 * @return
+	 */
+	public ListNode removeNthFromEnd1(ListNode head, int k) {
 		int len = 0;
 		ListNode h = head;
 		// 计算出链表节点个数
@@ -41,7 +80,7 @@ public class _19_RemoveKthNodeFromEnd {
 	 * 同时移动 p 与 q，直到 q 指向的为 NULL
 	 * 将 p 的下一个节点指向下下个节点
 	 */
-	public ListNode solutionBetter(ListNode head, int n){
+	public ListNode removeNthFromEndBetter(ListNode head, int n){
 		// 创建头节点让操作统一
 		ListNode dummyHead = new ListNode(0);
 		dummyHead.next = head;
