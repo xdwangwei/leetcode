@@ -172,4 +172,59 @@ public class _567_PermutationInString {
         }
         return false;
     }
+
+    /**
+     * 双指针滑动窗口写法
+     *  简化使用双指针滑动窗口，保持窗口内每个字符次数与原串对应一致，否则收缩左边界，
+     *  当窗口能扩张到大小和原串一样时，说明当前窗口内每个字符次数都和原串中一致，并且窗口内字符个数=原串字符个数，说明匹配成功
+     *  具体：
+     *
+     *  先统计s中每个字符出现次数 for (char c : s) cnt[c]--; 欠债
+     *  t，滑动窗口 left =0， right = 0.
+     *  while (rigth < n) {
+     *      // 扩张
+     *      char c = t[right]; right++;
+     *      // 还债
+     *      cnt[c]++;
+     *      // 窗口内字符c的次数多于原串s，此时进行窗口收缩,对于未在原串出现的字符e，也会触发收缩，所以能自动移除去
+     *      while (cnt[c] > 0) {
+     *          char d = t[left];
+     *          cnt[d]--;
+     *          left++;
+     *      }
+     *      // 收缩完成后，窗口内字符c个数与原串一样，
+     *      // 当 窗口大小恰好能够扩张到原串长度时，说明窗口恰好包含了原串每个字符，且次数都一样，此时 返回 true
+     *      if (right - left + 1  == m) return true;
+     *  }
+     */
+    public boolean checkInclusion8(String s1, String s2) {
+        int m = s1.length(), n = s2.length();
+        // s2 必须比 s1 更长
+        if (m > n) {
+            return false;
+        }
+        int[] cnt = new int[26];
+        // 原串字符个数统计
+        for (char c : s1.toCharArray()) {
+            cnt[c - 'a']--;
+        }
+        // 滑动窗口
+        int l = 0, r = 0;
+        while (r < n) {
+            // 当前字符入窗口，右边界扩展
+            char c = s2.charAt(r++);
+            cnt[c - 'a']++;
+            // 当前字符个数多于原串中个数
+            while (cnt[c - 'a'] > 0) {
+                // 窗口收缩
+                cnt[s2.charAt(l++) - 'a']--;
+            }
+            // 窗口收缩内，窗口内每个字符个数都和原串中一致，若此时窗口大小恰好=原串长度
+            // 说明窗口内字符排序恰好为串s1的一个变位词
+            if (r - l == m) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

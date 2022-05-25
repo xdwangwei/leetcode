@@ -1,49 +1,40 @@
-package com.window;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.offerassult;
 
 /**
  * @author wangwei
- * 2020/7/27 12:41
+ * 2020/7/27 12:40
  *
- * 438. 找到字符串中所有字母异位词
- * 给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词 的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
+ * 剑指 Offer II 014. 字符串中的变位词
+ * 给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的某个变位词。
  *
- * 异位词 指由相同字母重排列形成的字符串（包括相同的字符串）。
- *
- *
- *
- * 示例 1:
- *
- * 输入: s = "cbaebabacd", p = "abc"
- * 输出: [0,6]
- * 解释:
- * 起始索引等于 0 的子串是 "cba", 它是 "abc" 的异位词。
- * 起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词。
- *  示例 2:
- *
- * 输入: s = "abab", p = "ab"
- * 输出: [0,1,2]
- * 解释:
- * 起始索引等于 0 的子串是 "ab", 它是 "ab" 的异位词。
- * 起始索引等于 1 的子串是 "ba", 它是 "ab" 的异位词。
- * 起始索引等于 2 的子串是 "ab", 它是 "ab" 的异位词。
+ * 换句话说，第一个字符串的排列之一是第二个字符串的 子串 。
  *
  *
- * 提示:
  *
- * 1 <= s.length, p.length <= 3 * 104
- * s 和 p 仅包含小写字母
+ * 示例 1：
+ *
+ * 输入: s1 = "ab" s2 = "eidbaooo"
+ * 输出: True
+ * 解释: s2 包含 s1 的排列之一 ("ba").
+ * 示例 2：
+ *
+ * 输入: s1= "ab" s2 = "eidboaoo"
+ * 输出: False
+ *
+ *
+ * 提示：
+ *
+ * 1 <= s1.length, s2.length <= 104
+ * s1 和 s2 仅包含小写字母
+ *
+ *
+ * 注意：本题与主站 567 题相同： https://leetcode-cn.com/problems/permutation-in-string/
+ *
  */
-public class _438_FindAllAnagramsInAString {
+public class _014_PermutationInString {
 
     /**
-     *
-     * 和567题一样啊
-     *
      * 双指针滑动窗口写法
-     *
      *  简化使用双指针滑动窗口，保持窗口内每个字符次数与原串对应一致，否则收缩左边界，
      *  当窗口能扩张到大小和原串一样时，说明当前窗口内每个字符次数都和原串中一致，并且窗口内字符个数=原串字符个数，说明匹配成功
      *  具体：
@@ -65,39 +56,36 @@ public class _438_FindAllAnagramsInAString {
      *      // 当 窗口大小恰好能够扩张到原串长度时，说明窗口恰好包含了原串每个字符，且次数都一样，此时 返回 true
      *      if (right - left + 1  == m) return true;
      *  }
-     *  记得统计每一个符合要求的窗口起始位置就好了
      */
-    public List<Integer> findAnagrams(String s, String p) {
-        List<Integer> ans = new ArrayList<>();
-        int m = p.length(), n = s.length();
-        // s必须比p长
+    public boolean checkInclusion(String s1, String s2) {
+        int m = s1.length(), n = s2.length();
+        // s2 必须比 s1 更长
         if (m > n) {
-            return ans;
+            return false;
         }
         int[] cnt = new int[26];
         // 原串字符个数统计
-        for (char c : p.toCharArray()) {
+        for (char c : s1.toCharArray()) {
             cnt[c - 'a']--;
         }
         // 滑动窗口
         int l = 0, r = 0;
         while (r < n) {
             // 当前字符入窗口，右边界扩展
-            char c = s.charAt(r++);
+            char c = s2.charAt(r++);
             cnt[c - 'a']++;
             // 当前字符个数多于原串中个数
             while (cnt[c - 'a'] > 0) {
                 // 窗口收缩
-                cnt[s.charAt(l++) - 'a']--;
+                cnt[s2.charAt(l++) - 'a']--;
             }
             // 窗口收缩内，窗口内每个字符个数都和原串中一致，若此时窗口大小恰好=原串长度
             // 说明窗口内字符排序恰好为串s1的一个变位词
-            // 记录当前窗口左边界
             if (r - l == m) {
-                ans.add(l);
+                return true;
             }
         }
-        // 返回
-        return ans;
+        return false;
     }
+
 }
