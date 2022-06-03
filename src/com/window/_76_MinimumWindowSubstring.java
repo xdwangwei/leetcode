@@ -62,7 +62,8 @@ public class _76_MinimumWindowSubstring {
 
         // 最小合法字符出串的长度
         int min = Integer.MAX_VALUE;
-        String res = "";
+        // 对应的起始位置
+        int start = 0;
 
         // 统计需要包含的字符
         HashMap<Character, Integer> need = new HashMap<>();
@@ -91,16 +92,21 @@ public class _76_MinimumWindowSubstring {
                 window.put(c, window.getOrDefault(c, 0) + 1);
                 // 并且在窗口中的出现次数达到要求，那么窗口中的有效字符数加1
                 // 因为map存储的是对象，用==比较会非常慢，所以采用intVlue或equals
-                if (need.get(c).intValue() == window.get(c).intValue())
+                if (need.get(c).intValue() == window.get(c).intValue()) {
                     valid++;
+                }
             }
 
             // 当窗口中的合法字符够了的时候，就可以更新答案，然后缩小窗口(友移左边界)
-            while (valid == need.size()) {
+            // ① min是我们目前记录的符合要求的最短串，那么 比 min 更大的窗口我们没必要再考虑
+            while (valid == need.size() || right - left >= min) {
                 if (right - left < min) {
-                    // 窗口是左闭右开的
                     min = right - left;
-                    res = s.substring(left, right);
+                    start = left;
+                    // ② 目标子串不可能比 t 本身更短，直接返回
+                    if (min == t.length()) {
+                        return s.substring(start, start + min);
+                    }
                 }
                 // 待移出窗口的字符
                 char d = s.charAt(left);
@@ -117,7 +123,7 @@ public class _76_MinimumWindowSubstring {
                 }
             }
         }
-        return res;
+        return min == Integer.MAX_VALUE ? "" : s.substring(start, start + min);
     }
 
     public static void main(String[] args) {
