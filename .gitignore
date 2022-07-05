@@ -2,3 +2,4 @@
 first.iml
 out/
 lib/
+src/**/test
