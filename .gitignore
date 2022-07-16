@@ -1,5 +1,4 @@
 .idea/
-first.iml
+*.iml
 out/
 lib/
-src/**/test
