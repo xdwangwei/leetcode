@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * @author wangwei
  * @date 2022/5/14 19:22
- * @description: Main
+ * @description: Sep18_Main1
  * 时间限制： 3000MS
  * 内存限制： 589824KB
  * 题目描述：
@@ -43,7 +43,6 @@ import java.util.Scanner;
  * 6 5 3 2 1 4
  */
 public class May14_Main2 {
-
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

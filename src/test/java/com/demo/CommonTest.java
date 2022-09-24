@@ -1,11 +1,11 @@
 package com.demo;
 
+import org.junit.Test;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Random;
-
-import org.junit.Test;
 
 /**
  * @author wangwei37 <wangwei37@kuaishou.com>
