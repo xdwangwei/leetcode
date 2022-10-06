@@ -1,5 +1,8 @@
 package com.string;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 /**
  * @author wangwei
  * 2022/3/25 10:50
@@ -77,5 +80,34 @@ public class _921_MinimumAddToMakeParenthesesValid {
         }
         // 返回所需的左右括号总数
         return left + right;
+    }
+
+    /**
+     * 与count计数法类似，只是借用栈结构来完成 () 消除，统计剩下的左右括号数量
+     *
+     * 对字符串s进行每个字符的遍历，放到堆栈中。当发现栈顶字符是‘(’，待入栈的字符是‘)’，则符合括号匹配的情况。那么，此时我们只需将栈顶字符出栈即可。而针对于其他情况，我们都是将遍历的字符入栈即可。那么字符串s遍历完毕之后，我们来调用size()方法计算存储的字符长度，返回的长度就是这道题的结果。
+     *
+     * 作者：muse-77
+     * 链接：https://leetcode.cn/problems/minimum-add-to-make-parentheses-valid/solution/-by-muse-77-6dlt/
+     * 来源：力扣（LeetCode）
+     * 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+     * @param s
+     * @return
+     */
+    public int minAddToMakeValid3(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        char[] chars = s.toCharArray();
+        for (char c : chars) {
+            if (c == '(') {
+                stack.push('(');
+            } else {
+                if (!stack.isEmpty() && stack.peek() == '(') {
+                    stack.pop();
+                } else {
+                    stack.push(')');
+                }
+            }
+        }
+        return stack.size();
     }
 }
