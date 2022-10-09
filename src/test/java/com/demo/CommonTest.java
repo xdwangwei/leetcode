@@ -16,13 +16,11 @@ public class CommonTest {
     @Test
     public void testDoublePrecision() {
         int qps = 100000, numOfInterface = 10;
-        String[] uris = new String[numOfInterface];
         double[] weight = new double[numOfInterface];
         Random random = new Random();
         double total = 0.0;
         // 随机10个uri
         for (int i = 0; i < numOfInterface; i++) {
-            uris[i] = "uri" + i;
             // 每个uri的权重
             weight[i] = 8 + random.nextDouble() * 2;
             total += weight[i];
