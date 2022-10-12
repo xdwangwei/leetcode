@@ -5,7 +5,10 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * @author wangwei37 <wangwei37@kuaishou.com>
@@ -52,5 +55,37 @@ public class CommonTest {
             System.out.println(field.getName());
             System.out.println(Modifier.toString(field.getModifiers()));
         }
+    }
+
+
+    static class Node {
+        int age;
+        String name;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Node node = (Node) o;
+            return age == node.age && Objects.equals(name, node.name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(age, name);
+        }
+
+        Node(int age, String name) {
+            this.age = age;
+            this.name = name;
+        }
+
+    }
+
+    @Test
+    public void testHashcodeAndEquals() {
+        Set<Node> set = new HashSet<>();
+        set.add(new Node(18, "zhangsan"));
+        System.out.println(set.contains(new Node(18, "zhangsan")));
     }
 }
