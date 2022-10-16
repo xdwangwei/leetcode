@@ -146,6 +146,45 @@ public class _03_lengthOfLongestNoRepeatSubstring {
         return max;
     }
 
+    /**
+     * 更简单的滑动窗口
+     *
+     * 用window[255]保存当前窗口内每个字符的数量
+     *
+     * 逐个遍历s字符，每次将当前字符c加入窗口，当前窗口内c的个数加1
+     * 当 window[c] 值大于 1 时，说明窗口中存在重复字符，不符合条件，就该移动 left 缩小窗口了嘛。
+     * 因为我们每次加入一个字符都要保证它的次数不超过1，也就是不重复，所以我们窗口内保证了当前所有字符都不重复
+     *
+     * 唯一需要注意的是，在哪里更新结果 res 呢？
+     *
+     * 我们要的是最长无重复子串，哪一个阶段可以保证窗口中的字符串是没有重复的呢？
+     *
+     * 这里和之前不一样，要在收缩窗口完成后更新 res，因为窗口收缩的 while 条件是存在重复元素，
+     * 换句话说[收缩完成后]一定保证窗口中[没有重复]嘛，所以每次缩小完窗口后就可以更新答案了
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length();
+        int left = 0, right = 0, ans = 0;
+        // 保存当前窗口内字符的数量
+        int[] window = new int[255];
+        // 逐个遍历
+        while (right < n) {
+            // 加入当前窗口
+            char c = s.charAt(right++);
+            // 字符数增加
+            window[c]++;
+            // 缩小窗口，去重
+            while (window[c] > 1) {
+                window[s.charAt(left++)]--;
+            }
+            // 更新答案
+            ans = Math.max(ans, right - left);
+        }
+        return ans;
+    }
+
     public static void main(String[] args) {
         System.out.println(solution("abcabcbb")); // 3
         System.out.println(solution("bbbbbb")); // 1
