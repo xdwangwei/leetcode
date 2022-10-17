@@ -98,12 +98,11 @@ public class _76_MinimumWindowSubstring {
             }
 
             // 当窗口中的合法字符够了的时候，就可以更新答案，然后缩小窗口(友移左边界)
-            // ① min是我们目前记录的符合要求的最短串，那么 比 min 更大的窗口我们没必要再考虑
-            while (valid == need.size() || right - left >= min) {
+            while (valid == need.size()) {
                 if (right - left < min) {
                     min = right - left;
                     start = left;
-                    // ② 目标子串不可能比 t 本身更短，直接返回
+                    // 目标子串不可能比 t 本身更短，直接返回
                     if (min == t.length()) {
                         return s.substring(start, start + min);
                     }
@@ -124,6 +123,57 @@ public class _76_MinimumWindowSubstring {
             }
         }
         return min == Integer.MAX_VALUE ? "" : s.substring(start, start + min);
+    }
+
+
+    /**
+     * 滑动窗口，用数组代替map，简化代码流程
+     * @param s
+     * @param t
+     * @return
+     */
+    public String minWindow2(String s, String t) {
+        if (s.length() < t.length()) {
+            return "";
+        }
+        // t中每个字符的数量
+        int[] need = new int[255];
+        // 当前窗口内每个字符数量
+        int[] window = new int[255];
+        // needk，t中字符种类；windowk，当前窗口内字符种类
+        int needK = 0, windowK = 0;
+        // 统计t中每个字符数量，及字符种类
+        for (char c : t.toCharArray()) {
+            if (++need[c] == 1) {
+                needK++;
+            }
+        }
+        // 滑动窗口，len 最小长度，start 对应的起始位置，初始化为无效值
+        int left = 0, right = 0, start = -1, len = s.length() + 1;
+        while (right < s.length()) {
+            char c = s.charAt(right++);
+            // 窗口内字符c个数增加；当正好和t中字符c个数一致时，窗口内有效字符数+1
+            if (++window[c] == need[c]) {
+                windowK++;
+            }
+            // 当包含了t中全部字符，并且每个字符数量都一样时，尝试缩小窗口
+            while (windowK == needK) {
+                // 先更新答案
+                if (right - left < len) {
+                    len = right - left;
+                    start = left;
+                }
+                // 收缩窗口
+                char d = s.charAt(left++);
+                // 收缩前注意判断字符d的次数，是否需要更新窗口内有效字符数windowk
+                if (window[d] == need[d]) {
+                    windowK--;
+                }
+                window[d]--;
+            }
+        }
+        // 返回，注意判断 start 是否有有效值
+        return start == -1 ? "" : s.substring(start, start + len);
     }
 
     public static void main(String[] args) {
