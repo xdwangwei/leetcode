@@ -1,15 +1,12 @@
-package com.hot100;
+package com.offerassult;
 
 /**
  * @author wangwei
- * 2022/4/17 15:15
+ * @date 2022/10/19 12:58
+ * @description: _020_CountNumberOfPalindromeSubstring
  *
- * 647. 回文子串
- * 给你一个字符串 s ，请你统计并返回这个字符串中 回文子串 的数目。
- *
- * 回文字符串 是正着读和倒过来读一样的字符串。
- *
- * 子字符串 是字符串中的由连续字符组成的一个序列。
+ * 剑指 Offer II 020. 回文子字符串的个数
+ * 给定一个字符串 s ，请计算这个字符串中有多少个回文子字符串。
  *
  * 具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被视作不同的子串。
  *
@@ -31,8 +28,11 @@ package com.hot100;
  *
  * 1 <= s.length <= 1000
  * s 由小写英文字母组成
+ *
+ *
+ * 注意：本题与主站 647 题相同：https://leetcode-cn.com/problems/palindromic-substrings/
  */
-public class _647_PalindromicSubstrings {
+public class _020_CountNumberOfPalindromeSubstring {
 
     /**
      * 计算有多少个回文子串的最朴素方法就是枚举出所有的回文子串，而枚举出所有的回文字串又有两种思路，分别是：
@@ -117,5 +117,4 @@ public class _647_PalindromicSubstrings {
         }
         return res;
     }
-
 }
