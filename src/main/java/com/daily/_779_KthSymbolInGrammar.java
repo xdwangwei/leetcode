@@ -1,43 +1,46 @@
-package com.mianshi.year2022.tencent;
-
-import java.util.Scanner;
+package com.daily;
 
 /**
  * @author wangwei
- * @date 2022/10/16 19:57
- * @description: _Oct16_Main1
+ * @date 2022/10/20 11:09
+ * @description: _779_KthSymbolInGrammar
  *
- * 按照以下规则构造序列：
- * 第一个字符是1
- * 第二个字符是0，此时序列是10
- * 第3-4个字符是 第1-2个字符反转得到，（1变为0，0变为1），此时序列是 1001
- * 第5-8个字符是 第1-4个字符反转得到，此时序列是  10010110
- * 以此类推
- * 给定l和r，问，第l个字符和第r个字符之间有多少个'1'????
+ * 779. 第K个语法符号
+ * 我们构建了一个包含 n 行( 索引从 1  开始 )的表。首先在第一行我们写上一个 0。接下来的每一行，将前一行中的0替换为01，1替换为10。
+ *
+ * 例如，对于 n = 3 ，第 1 行是 0 ，第 2 行是 01 ，第3行是 0110 。
+ * 给定行数 n 和序数 k，返回第 n 行中第 k 个字符。（ k 从索引 1 开始）
+ *
+ *
+ * 示例 1:
+ *
+ * 输入: n = 1, k = 1
+ * 输出: 0
+ * 解释: 第一行：0
+ * 示例 2:
+ *
+ * 输入: n = 2, k = 1
+ * 输出: 0
+ * 解释:
+ * 第一行: 0
+ * 第二行: 01
+ * 示例 3:
+ *
+ * 输入: n = 2, k = 2
+ * 输出: 1
+ * 解释:
+ * 第一行: 0
+ * 第二行: 01
+ *
+ *
+ * 提示:
+ *
+ * 1 <= n <= 30
+ * 1 <= k <= 2n - 1
+ * 通过次数27,850提交次数60,066
  */
-public class _Oct16_Main4 {
+public class _779_KthSymbolInGrammar {
 
-    public static void main(String[] args) {
-        System.out.println(1 % 0);
-        Scanner scanner = new Scanner(System.in);
-        int l = scanner.nextInt();
-        int r = scanner.nextInt();
-        int ans = 0;
-        for (int i = l; i <= r; ++i) {
-            ans += calc(i);
-        }
-        System.out.println(ans);
-    }
-
-    private static int calc(int i) {
-        if (i <= 8) {
-            return "10010110".charAt(i - 1) - '0';
-        }
-        // [j+1, 2j] --< [1, j]
-        int j = Integer.highestOneBit(i - 1);
-        int diff = i - (j + 1);
-        return calc(1 + diff) ^ 1;
-    }
 
     /**
      * 正向找规律 + 递归
