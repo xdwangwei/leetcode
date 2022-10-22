@@ -1,51 +1,49 @@
-package com.list;
+package com.offerassult;
 
 import com.common.ListNode;
 
 /**
  * @author wangwei
- * 2020/8/31 20:52
- * 234. 回文链表
- * 请判断一个链表是否为回文链表。
+ * @date 2022/10/22 14:10
+ * @description: _027_PalindromeLinkedList
  *
- * 示例 1:
+ * 剑指 Offer II 027. 回文链表
+ * 给定一个链表的 头节点 head ，请判断其是否为回文链表。
  *
- * 输入: 1->2
- * 输出: false
- * 示例 2:
+ * 如果一个链表是回文，那么链表节点序列从前往后看和从后往前看是相同的。
  *
- * 输入: 1->2->2->1
+ *
+ *
+ * 示例 1：
+ *
+ *
+ *
+ * 输入: head = [1,2,3,3,2,1]
  * 输出: true
- * 进阶：
- * 你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+ * 示例 2：
  *
+ *
+ *
+ * 输入: head = [1,2]
+ * 输出: false
+ *
+ *
+ * 提示：
+ *
+ * 链表 L 的长度范围为 [1, 105]
+ * 0 <= node.val <= 9
+ *
+ *
+ * 进阶：能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+ *
+ *
+ *
+ * 注意：本题与主站 234 题相同：https://leetcode-cn.com/problems/palindrome-linked-list/
  */
-public class _234_PalindromeLinkedList {
+public class _027_PalindromeLinkedList {
 
     /**
-     * 方法一：可以构造一个原列表的逆序列表，然后逐个对比节点值，空间复杂度 O(n)
-     * 方法二：借助后续遍历的思想实现类似栈的功能，模仿双指针实现回文判断的功能
-     * @param head
-     * @return
-     */
-    ListNode left; // 首指针
-    public boolean isPalindrome12(ListNode head) {
-        left = head;
-        return postTraverse(head);
-    }
-    private boolean postTraverse(ListNode right) {
-        if (right == null) return true;
-        // 后续遍历代码，先递归到列表末尾，然后left和right指针开始匹配
-        boolean res = postTraverse(right.next);
-        res = res && left.val == right.val;
-        // 匹配完后，递归返回上一层(倒数第二个节点)，left前进到(第二个节点)
-        left = left.next;
-        // 返回当前匹配结果
-        return res;
-    }
-
-    /**
-     * 方法三：借助快慢指针思想，先找到列表的中间节点，然后反转中间节点及之后部分，然后匹配
+     * 借助快慢指针思想，先找到列表的中间节点，然后反转中间节点及之后部分，然后匹配
      * 空间复杂度 O(1)
      *
      * 寻找中间节点：快指针每次走两步，慢指针每次走一步，当快指针走完时，返回slow，这种情况下
@@ -64,10 +62,10 @@ public class _234_PalindromeLinkedList {
      *                        奇数节点，退出时：fast.next = null 但 fast != null，此时 让slow再前进一步
      *
      */
-    public boolean isPalindrome3(ListNode head) {
+    public boolean isPalindrome(ListNode head) {
         if (head == null || head.next == null) return true;
-       ListNode fast = head, slow = head;
-       // 快慢指针找到最中间的节点
+        ListNode fast = head, slow = head;
+        // 快慢指针找到最中间的节点
         while (fast != null && fast.next != null) {
             fast = fast.next.next;
             slow = slow.next;
@@ -103,5 +101,4 @@ public class _234_PalindromeLinkedList {
         }
         return pre;
     }
-
 }
