@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * @author wangwei
  * 2020/7/31 11:28
- *
+ * <p>
  * 不借助java默认实现的 LinkedHashMap
  * 使用自己实现的双向链表和HashMap实现LRU算法
  */
@@ -27,6 +27,7 @@ public class _146_LRUCache {
 
     /**
      * O(1)时间复杂度
+     *
      * @param key
      * @return
      */
@@ -42,6 +43,7 @@ public class _146_LRUCache {
 
     /**
      * O(1)时间复杂度
+     *
      * @param key
      * @return
      */
@@ -55,13 +57,13 @@ public class _146_LRUCache {
         // 再添加为最近访问
         addRecently(new DNode(key, value));
 
-        // 如果容量超出初始容量，则删除最近未使用节点
+        // 如果容量超出初始容量，则删除最近最久未使用节点
         if (map.size() > this.capacity)
             removeLeastRecently();
     }
 
     // 将某个键提为最近使用的键，也就是放在链表最后面，这个键必须存在
-    private void makeRecently(DNode DNode){
+    private void makeRecently(DNode DNode) {
         // 先存链表中删除
         cache.remove(DNode);
         // 再插入到末尾
@@ -69,7 +71,7 @@ public class _146_LRUCache {
     }
 
     // 添加一个最近使用的节点，也就是在链表末尾添加一个新节点
-    private void addRecently(DNode DNode){
+    private void addRecently(DNode DNode) {
         // 插入链表末尾
         cache.addLast(DNode);
         // 同时要在hash表中保存
@@ -77,7 +79,7 @@ public class _146_LRUCache {
     }
 
     // 删除某个键值对
-    private void deleteKey(DNode DNode){
+    private void deleteKey(DNode DNode) {
         // 从链表中删除
         cache.remove(DNode);
         // 同时要从map中删除
@@ -85,7 +87,7 @@ public class _146_LRUCache {
     }
 
     // 删除最长时间未使用的键值对，也就是删除链表第一个节点
-    private void removeLeastRecently(){
+    private void removeLeastRecently() {
         // 从链表中删除第一个节点
         DNode DNode = cache.removeFirst();
         // 同时要从map中删除

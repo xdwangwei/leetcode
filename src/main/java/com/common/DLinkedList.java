@@ -41,7 +41,7 @@ public class DLinkedList {
     }
 
     /**
-     * 删除链表中的 x 节点（x 一定存在）
+     * 删除链表中的 x 节点（x 一定存在，并且不可能是伪头部或伪尾部）
      * 由于是双链表且给的是目标 Node 节点，时间 O(1)
      *
      * @param DNode
