@@ -9,6 +9,8 @@ import java.util.Random;
  */
 public class Algorithms {
 
+    static Random random = new Random();
+
     /**
      * 快速排序
      * @param arr
@@ -20,14 +22,49 @@ public class Algorithms {
         quickSort(arr, 0, arr.length - 1);
     }
 
+
+    /**
+     * 三路归并快速排序
+     * @param arr
+     */
+    public static void threeWayQuickSort(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+        threeWayQuickSort(arr, 0, arr.length - 1);
+    }
+
+    /**
+     * 快速排序
+     * @param arr
+     * @param low
+     * @param high
+     */
     private static void quickSort(int[] arr, int low, int high) {
         if (low >= high) {
             return;
         }
-        int mid = partition2(arr, low, high);
+        // int mid = partition2(arr, low, high);
         // int mid = partition(arr, low, high);
-        quickSort(arr, low, mid - 1);
-        quickSort(arr, mid + 1, high);
+        int mid = randomPartition(arr, low, high);
+        quickSort(arr, low, mid - 1);     // <= pivot 区域
+        quickSort(arr, mid + 1, high);     // > pivot 区域
+    }
+
+    /**
+     * 三路归并快速排序
+     * @param arr
+     * @param low
+     * @param high
+     */
+    private static void threeWayQuickSort(int[] arr, int low, int high) {
+        if (low >= high) {
+            return;
+        }
+        int[] p = randomThreeWayPartition(arr, low, high);
+        // [ p0....p1 ]   ==  pivot
+        threeWayQuickSort(arr, low, p[0] - 1);   // < pivot 区域
+        threeWayQuickSort(arr, p[1] + 1, high);   // > pivot 区域
     }
 
     /**
@@ -75,13 +112,13 @@ public class Algorithms {
      * 也就是说不加=，可能出现双指针都不移动的情况。
      * 当然，也可以在for循环内部，对这种情况进行特殊处理。保证至少有一个指针在移动。
      *   while () {
-     while() j--
-     while() i++
-     if (i >= j) break
-     swap(i, j)
-     // 特殊处理
-     if(nums[i] == pivot) j--
-     if(nums[j] == pivot) i++
+            while() j--
+            while() i++
+            if (i >= j) break
+            swap(i, j)
+            // 特殊处理
+            if(nums[i] == pivot) j--
+            if(nums[j] == pivot) i++
      }
      * 而第一种partition，遇到一个不合适的就处理，每一次都会有一个指针在移动，所以不用考虑这种情况。
 
@@ -152,38 +189,166 @@ public class Algorithms {
         return j;
     }
 
-    Random random = new Random();
-
     /**
      *
-     * 快速排序，partition过程
-     * 以nums[right]为pivot，返回j，保证 nums[left, j] 都 < pivot=nums[right]
+     * 快速排序，partition过程，返回 p
+     * 从nums[left...right]范围内随机取一个数字作为 pivot
+     * 目标：保证 nums[left, p] 都 <= pivot
+     *          nums[p + 1, right] 都 > pivot
+     *
+     * 算法：选择 nums[right] 作为 pivot，去处理nums[left, right-1]，再把pivot放置到中间合适位置
+     * 假设我们已经有一个分割点是 p，那么 nums[left,p] 都满足 <= pivot，那么p 之后的位置上的元素都必须大于 pivot
+     *
+     * 若我们发现p之后某个位置j上出现元素x <= pivot 的情况一，需要将这个 x 划分到左半区域去：
+     *      交换 位置j上元素x(这个元素是 <= pivot的) 和 位置 p+1 上元素(这个元素一定是 > pivot 的)
+     *      更新 p 为 p + 1；就做到了 x 划分到了 p 左边区域，并保证了 (p+1, j] 位置都是 > pivot 的元素
+     *      j 继续前进；直到 j == right 退出，
+     *      将 nums right 位置 和 p + 1 位置 元素交换；
+     *      p 更新为 p + 1
+     *      返回 p + 1
+     *
+     * 情况二就是 j 位置元素 > pivot，那么 j 直接前进即可
+     *
+     * 初始时让 p 为 left - 1，代表 [...p] 范围 都 <= pivot，然后 让 j 从 left 开始扫描到 right - 1，最后 把pivot放入合适位置
+     *
+     *
+     * 为什么是j前进到right退出，不是j超出right退出呢？
+     * 因为 right位置元素本身就拿来做 pivot 了，它肯定是满足 <= pivot的，所以把 它 和结束后的 p + 1 位置元素交换，再更新p为p+1，也一定是合理的
+     * 相当于我们已经提前知道while最后一轮时，一定是破坏情况一的，所以我们把它单独拿出来做了一次操作；
+     * 那么，把这个情况放入while循环也没问题吧？也是可以的
+     * 但如果把划分目标改为 保证 nums[left, p] 都 < pivot，你再把它放入最后一轮循环就会出问题
+     * 因为 right位置上的元素 肯定不满足 < pivot，那么 这一次交换就不会被进行，就会导致 pivot 最终没有被放入合适位置
+     *
+     *
+     * 【模板】
+     *
+     * 所以建议 记住这个模板：不管划分目标是 nums[left, p] 都 <= pivot 还是 nums[left, p] 都 < pivot：统一操作：
+     *      1. 选择 nums[right] 作为 pivot，
+     *      2. 让 p 初始化为 left - 1，代表 nums[...p] 范围 都 <= pivot
+     *      3. 让 j 从 left 开始扫描到 right - 1
+     *              如果 nums[j] > pivot：j继续前进  （如果划分目标是nums[left, p] 都 < pivot，这里就是 nums[j] >= pivot）
+     *              否则：swap(nums, p + 1, j); p = p + 1; j继续前进，简写为 swap(nums, ++p, j); j++;
+     *      4. 放置pivot到正确位置
+     *              swap(nums, ++p, high);
+     *      5. 返回 p
+     *
+     * 【优化】
+     * 为了避免数组本身有序情况下导致partition效率低下，我们初始时随机选择一个位置和right位置进行交换，再让right位置作为pivot进行上述过程！
      * @param nums
      * @param low
      * @param high
      * @return
      */
-    private int randomPartition(int[] nums, int low, int high) {
-        if (low == high) return low;
-        // 避免最坏时间复杂度，先随机选择一个位置和 预定的pivot元素位置交换
-        int randIndex = low + random.nextInt(high - low + 1);
-        swap(nums, randIndex, high);
-
-        // 选取最右边元素为pivot，j用于顺序扫描当前范围内的全部元素
-        // i 用于保证 nums[low, i]位置元素都 满足 <= pivot
-        // 也就是 每一次 nums[j] < pivot ，就把nums[j]交换到i位置去，保证<pivot的元素全部放置在左边部分
-        int pivot = nums[high], i = low - 1, j = low;
-        while (j <= high) {
-            // 每一次 nums[j] < pivot ，就把nums[j]交换到i位置去，保证<pivot的元素全部放置在左边部分
-            if (nums[j] < pivot) {
-                swap(nums, ++i, j);
-            }
-            ++j;
+    private static int randomPartition(int[] nums, int low, int high) {
+        if (low == high) {
+            return low;
         }
-        // 把pivot放置在正确位置
-        swap(nums, ++i, high);
-        // nums[low, i]位置 都满足 <= pivot
-        return i;
+        // 先随机选择一个位置和right位置进行交换，
+        int idx = (int) (low + Math.random() * (high - low + 1));
+        swap(nums, idx, high);
+        // 1. 再让right位置作为pivot进行划分！
+        int pivot = nums[high];
+        // 2. 让 p 初始化为 left - 1，代表 nums[...p] 范围 都 <= pivot
+        // p 之后的位置上的元素都必须大于 pivot
+        int p = low - 1;
+        // 3. 遍历 p 之后 位置上的元素，直到 high - 1 位置
+        for (int j = low; j < high; ++j) {
+            // 如果它的确 > pivot，遍历下一个
+            // 如果它 <= pivot，它需要划分到p左边去
+            if (nums[j] <= pivot) {
+                // 交换 p + 1 位置 和 j 位置
+                // p 更新 为 p + 1
+                // j 前进
+                swap(nums, ++p, j);
+            }
+        }
+        // 4. 将 high 位置 的pivot元素放置在 合适位置(p+1)，p 更新 为 p + 1
+        swap(nums, ++p, high);
+        // 5. 返回 p
+        return p;
+    }
+
+
+    /**
+     * 上面的partition都是分两半
+     * 这里使用三路归并快速排序思想，将 nums[low...high] 划分为 三部分：
+     *      [low...p0 - 1]     <   nums
+     *      [ po....p1 ]       ==  nums
+     *      [p1 + 1...high]    >   nums
+     *
+     * 思路和上面类似：
+     *      1. 仍然选择 high 位置元素为  pivot，对 [low...right-1] 位置元素进行处理，将 pivot 放置到合适位置
+     *      2. 初始化 p0 为 low - 1，代表 p0 左边元素 都 < pivot
+     *         初始化 p1 为 (right-1) + 1，代表 p1 右边元素 都 > pivot
+     *         二者中间(j扫描过的区域)为 == pivot的元素
+     *      3. 让 j 从 low 开始扫描，当 j 与 p1 重合时停止(p1及右边已经属于处理过的位置了)，在此过程中：
+     *          nums[j] < pivot:
+     *              swap(nums, p0 + 1, j);  p0++; j++;
+     *          nums[j] == pivot:
+     *              j++;
+     *          nums[j] > pivot:
+     *              swap(nums, p1 - 1, j); p1--; j不变
+     *              因为 j 是从左往右扫描的：它能保证的是它及其左边的元素都是<=pivot的，但当你把一个右边未访问过的区域的数字交换到当前位置后
+     *              你不能直接前进j，你需要对此位置再进行一次判断；
+     *              在第一种情况中，当前把左边一个数字交换到当前位置时，因为这个数字是已经访问处理过的，它一定是满足我划分区域规则的，所以j直接前进
+     *      4. 最后，把 high 位置pivot 放入合适位置：
+     *          swap(nums, p1, high); p1++;
+     *          因为 pivot 本身肯定是属于 == pivot区间的，所以它应该放置在中间区间，从 p1 开始是 > pivot 的区间，所以把它和 p1 位置交换，再 更新p1自增
+     *      5. 返回 p0, p1
+     *
+     * 同样，为了避免最坏情况，先随机选一个位置和high位置元素交换，再进行上述过程
+     *
+     * @param nums
+     * @param low
+     * @param high
+     * @return
+     */
+    private static int[] randomThreeWayPartition(int[] nums, int low, int high) {
+        if (low == high) {
+            return new int[]{low, low};
+        }
+        // 先随机选择一个位置和right位置进行交换，
+        int idx = (int) (low + Math.random() * (high - low + 1));
+        swap(nums, idx, high);
+        // 1. 再让right位置作为pivot进行划分！
+        int pivot = nums[high];
+        //    处理 [low, high-1]
+        // 2. 初始化 p0 为 low - 1，代表 p0 左边元素 都 < pivot
+        //    初始化 p1 为 (right-1) + 1 = right，代表 p1 右边元素 都 > pivot
+        //    二者中间(j扫描过的区域)为 == pivot的元素
+        int p0 = low - 1, p1 = high;
+        // 3. 遍历 [low, p1)  位置上的元素
+        //    p1 及之后都是 > pivot 的元素，不用 再访问
+        for (int j = low; j < p1; ) {
+            // 它应该属于 p1及右边区域
+            if (nums[j] > pivot) {
+                // 交换 p1 - 1 位置 和 j 位置
+                // p1 更新 为 p1 - 1
+                // j 不动(交换过来一个未访问过的区域的数字，需要处理，不能直接跳过)
+                swap(nums, --p1, j);
+            }
+            // 它应该属于 p0及左边区域
+            else if (nums[j] < pivot) {
+                // 交换 p0 + 1 位置 和 j 位置
+                // p0 更新 为 p + 1
+                // j 前进（交换过来一个已经处理过的数字，一定满足规则，继续前进）
+                swap(nums, ++p0, j++);
+            } else {
+                // 满足 == pivot，直接前进
+                j++;
+            }
+        }
+        // 4. 将 high 位置 的pivot元素放置在 合适位置
+        //    while结束后， [low...p0]          <    pivot
+        //                 [p0 + 1...p1 - 1]   =    pivot
+        //                 [p1...high-1]       >    pivot
+        //    将pivot放置在 p1 位置，让 p1 右移
+        swap(nums, p1++, high);
+        // 5. 返回 p
+        // 返回目标是 [ p0....p1 ]   ==  pivot，这里做简要调整
+        return new int[]{p0 + 1, p1 - 1};
+        // 上面两行简化后就是
+        // swap(nums, p1, high);   return new int[]{p0 + 1, p1};
     }
 
 
@@ -201,7 +366,7 @@ public class Algorithms {
     }
 
     /**
-     * 二分查找
+     * 二分查找 左闭右闭写法
      * @param arr
      * @param target
      * @return
@@ -226,6 +391,31 @@ public class Algorithms {
         }
         return -1;
     }
+
+    /**
+     * 二分查找，左闭右开写法
+     * @param arr
+     * @param target
+     * @return
+     */
+    public static int binarySearch2(int[] arr, int target) {
+        if (arr == null || arr.length == 0) {
+            return -1;
+        }
+        int low = 0, high = arr.length;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (arr[mid] < target) {
+                low = mid + 1;
+            } else if (arr[mid] > target) {
+                high = mid;
+            } else {
+                return mid;
+            }
+        }
+        return -1;
+    }
+
 
     public static void main(String[] args) {
         System.out.println(-1 % 2); // -1
