@@ -1,11 +1,11 @@
-package com.daily;
+package com.offerassult;
 
 /**
  * @author wangwei
- * @date 2022/5/17 15:16
- * @description: _953_VarifyingAnAlienDictionary
+ * @date 2022/10/27 11:53
+ * @description: _034_VerifyingAnAlienDictionary
  *
- * 953. 验证外星语词典
+ * 剑指 Offer II 034. 外星语言是否排序
  * 某种外星语也使用英文小写字母，但可能顺序 order 不同。字母表的顺序（order）是一些小写字母的排列。
  *
  * 给定一组用外星语书写的单词 words，以及其字母表的顺序 order，只有当给定的单词在这种外星语中按字典序排列时，返回 true；否则，返回 false。
@@ -35,9 +35,11 @@ package com.daily;
  * 1 <= words[i].length <= 20
  * order.length == 26
  * 在 words[i] 和 order 中的所有字符都是英文小写字母。
+ *
+ *
+ * 注意：本题与主站 953 题相同： https://leetcode-cn.com/problems/verifying-an-alien-dictionary/
  */
-public class _953_VarifyingAnAlienDictionary {
-
+public class _034_VerifyingAnAlienDictionary {
 
     /**
      * 方法一：直接遍历：相当于把重新给定 abcdefg 的排列优先级
@@ -115,10 +117,5 @@ public class _953_VarifyingAnAlienDictionary {
         // 特殊情况就是：abc 和 abcd 这种，这种情况下，前缀相同，前缀部分每个字符的优先级也都匹配，
         // 此时 abc 应该 排在前面，也就是 str1 的长度 必须小于等于 str2
         return m <= n;
-    }
-
-    public static void main(String[] args) {
-        _953_VarifyingAnAlienDictionary obj = new _953_VarifyingAnAlienDictionary();
-        obj.isAlienSorted(new String[]{"word", "world", "row"}, "worldabcefghijkmnpqstuvxyz");
     }
 }
