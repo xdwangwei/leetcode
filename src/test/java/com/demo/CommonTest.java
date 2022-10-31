@@ -87,5 +87,10 @@ public class CommonTest {
         Set<Node> set = new HashSet<>();
         set.add(new Node(18, "zhangsan"));
         System.out.println(set.contains(new Node(18, "zhangsan")));
+
+        Set<int[]> set2 = new HashSet<>();
+        set2.add(new int[]{1, 2});
+        System.out.println(set2.contains(new int[]{1, 2}));
+        System.out.println(set2.contains(new int[]{2, 1}));
     }
 }
