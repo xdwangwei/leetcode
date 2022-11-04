@@ -1,43 +1,69 @@
-package com.array;
+package com.offerassult;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 /**
  * @author wangwei
- * 2020/4/8 17:07
- * <p>
- * 给定一个仅包含 0 和 1 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
- * <p>
- * 示例:
- * <p>
- * 输入:
- * [
- * ["1","0","1","0","0"],
- * ["1","0","1","1","1"],
- * ["1","1","1","1","1"],
- * ["1","0","0","1","0"]
- * ]
- * 输出: 6
- * <p>
- * 来源：力扣（LeetCode）
- * 链接：https://leetcode-cn.com/problems/maximal-rectangle
- * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+ * @date 2022/11/4 12:30
+ * @description: _040_MaximalRectangleAreaInMatrix
+ * 剑指 Offer II 040. 矩阵中最大的矩形
+ * 给定一个由 0 和 1 组成的矩阵 matrix ，找出只包含 1 的最大矩形，并返回其面积。
+ *
+ * 注意：此题 matrix 输入格式为一维 01 字符串数组。
+ *
+ *
+ *
+ * 示例 1：
+ *
+ *
+ *
+ * 输入：matrix = ["10100","10111","11111","10010"]
+ * 输出：6
+ * 解释：最大矩形如上图所示。
+ * 示例 2：
+ *
+ * 输入：matrix = []
+ * 输出：0
+ * 示例 3：
+ *
+ * 输入：matrix = ["0"]
+ * 输出：0
+ * 示例 4：
+ *
+ * 输入：matrix = ["1"]
+ * 输出：1
+ * 示例 5：
+ *
+ * 输入：matrix = ["00"]
+ * 输出：0
+ *
+ *
+ * 提示：
+ *
+ * rows == matrix.length
+ * cols == matrix[0].length
+ * 0 <= row, cols <= 200
+ * matrix[i][j] 为 '0' 或 '1'
+ *
+ *
+ * 注意：本题与主站 85 题相同（输入参数格式不同）： https://leetcode-cn.com/problems/maximal-rectangle/
+ *
  */
-public class _85_MaximalRectangle {
+public class _040_MaximalRectangleAreaInMatrix {
 
     /**
      * https://leetcode-cn.com/problems/maximal-rectangle/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-1-8/
-     * 借助84题直方图最大矩形面积 的思想。相当于平移x轴上下，对于每一次的x轴，求出每一列的连续的1的高度，作为矩形高度，传给84题的solution
+     * 借助39题直方图最大矩形面积 的思想。相当于平移x轴上下，对于每一次的x轴，求出每一列的连续的1的高度，作为矩形高度，传给39题的solution
      * 每个x轴会得到一个直方图最大矩形面积，在所有结果中取最大值
      *
      * @param matrix
      * @return
      */
-    public int maximalRectangle(char[][] matrix) {
-        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0)
+    public int maximalRectangle(String[] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length() == 0)
             return 0;
-        int rows = matrix.length, cols = matrix[0].length;
+        int rows = matrix.length, cols = matrix[0].length();
         int[] curLayerHeights = new int[cols];
         int res = 0;
         // x轴逐渐向下平移
@@ -45,7 +71,7 @@ public class _85_MaximalRectangle {
             // 更新当前列上连续的1的个数，(从当前的x轴往上)
             for (int j = 0; j < cols; j++) {
                 // 只有连续的1，当前列的矩阵高度才增加
-                if (matrix[i][j] == '1')
+                if (matrix[i].charAt(j) == '1')
                     curLayerHeights[j] += 1;
                     // 一旦出现0，相当于断开，不管对于当前的水平轴，还是再往下的水平轴，这个矩阵高度都要重新统计
                 else
@@ -115,67 +141,4 @@ public class _85_MaximalRectangle {
         // 返回
         return ans;
     }
-
-    /**
-     * 以每个点为矩阵右下角，逐个遍历所有矩阵，找出包含1最多的矩阵
-     *
-     * 不过，枚举右下角时，如何找到所有以它为右下角的矩阵，不能通过再枚举左端点完成，时间复杂度太高，我们采用以下策略：
-     * 若 (x,y) 为右下角点
-     * 我们可以在遍历的过程中计算出 x 行，以该位置结束的连续的1的个数，依次作为矩形的 底边
-     * 然后与当前位置行向上，找到同一列上所有点，判断以这些点结束的连续的1的个数，(都已经计算过)
-     * 这些值都可以作为 矩形的 顶边，对应的矩形高就是当前行-向上推进到的那一行，
-     * 在组成的所有矩形中取最大面积
-     *
-     * 理论上，我们在向上推进过程中应该保证当前列的点始终为1，不然矩阵会断开，但是我们可以省去这个过滤过程
-     * 因为假如 (x-k, j)='0' ，那么在x-k行以这个点结束的连续1个数是0，矩形 顶边 宽度为 0，矩形面积就是 0，
-     * 我们统计的是所有矩形最大面积，因此它并不会影响到最终答案
-     *
-     * @param matrix
-     * @return
-     */
-    public int maximalRectangle2(char[][] matrix) {
-        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0)
-            return 0;
-        int rows = matrix.length, cols = matrix[0].length;
-        int[][] curMatrix = new int[rows][cols];
-        int res = 0;
-        // 逐行逐个，求以它为右下角
-        for (int i = 0; i < rows; i++) {
-            // 统计以它结束的连续的1
-            for (int j = 0; j < cols; j++) {
-                // 当前位置是 ‘1’
-                if (matrix[i][j] == '1') {
-                    if (j == 0) {
-                        curMatrix[i][j] = 1;
-                    } else {
-                        // 如果它之前也是 ‘1’，那么以它结束的连续1的个数+1
-                        curMatrix[i][j] = curMatrix[i][j - 1] + 1;
-                    }
-                } else {
-                    // 它是‘0’，以它结束的连续1的个数为0
-                    curMatrix[i][j] = 0;
-                }
-
-                // 求以他为右下角顶点的所有矩阵中含1最多的那个
-                // 向左不用扩展，我们已经记录了当前点所在行以它结束的连续1的个数
-                // 我们需要向上扩展，找到最小的宽
-                int minWidth = curMatrix[i][j];
-                for (int up = i; up >= 0; up--) {
-                    // 找到最小的宽
-                    minWidth = Math.min(minWidth, curMatrix[up][j]);
-                    // 高度
-                    int height = i - up + 1;
-                    // 更新结果
-                    res = Math.max(res, minWidth * height);
-                }
-            }
-        }
-        return res;
-    }
-
-    public static void main(String[] args) {
-        char[][] arr1 = new char[8][];
-        System.out.println(arr1[0] == null);
-    }
-
 }
