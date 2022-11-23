@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * @author wangwei
  * @date 2022/11/23 11:49
- * @description: _MaximumNumberOfBallsInBox
+ * @description: _1742_MaximumNumberOfBallsInBox
  *
  * 1742. 盒子中小球的最大数量
  * 你在一家生产小球的玩具厂工作，有 n 个小球，编号从 lowLimit 开始，到 highLimit 结束（包括 lowLimit 和 highLimit ，即 n == highLimit - lowLimit + 1）。另有无限数量的盒子，编号从 1 到 infinity 。
@@ -46,7 +46,7 @@ import java.util.Arrays;
  *
  * 1 <= lowLimit <= highLimit <= 105
  */
-public class _MaximumNumberOfBallsInBox {
+public class _1742_MaximumNumberOfBallsInBox {
 
 
     /**
