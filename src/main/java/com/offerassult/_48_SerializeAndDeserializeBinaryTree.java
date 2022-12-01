@@ -1,20 +1,15 @@
-package com.tree;
+package com.offerassult;
 
 import com.common.TreeNode;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
-/**
- * @author wangwei
- * 2020/7/30 8:04
- *
 /**
  * @author wangwei
  * @date 2022/12/1 10:36
  * @description: _48_SerializeAndDeserializeBinaryTree
  *
- * 297. 序列化与反序列化二叉树
+ * 剑指 Offer II 048. 序列化与反序列化二叉树
  * 序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。
  *
  * 请设计一个算法来实现二叉树的序列化与反序列化。这里不限定你的序列 / 反序列化算法执行逻辑，只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。
@@ -47,9 +42,10 @@ import java.util.Queue;
  * 树中结点数在范围 [0, 104] 内
  * -1000 <= Node.val <= 1000
  *
+ *
+ * 注意：本题与主站 297 题相同：https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/
  */
-public class _297_TreeSerializeAndDeserialize {
-
+public class _48_SerializeAndDeserializeBinaryTree {
     /**
      * 中序遍历的方式行不通，因为无法实现反序列化方法 deserialize
      *

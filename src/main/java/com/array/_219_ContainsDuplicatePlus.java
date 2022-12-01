@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 给定一个整数数组和一个整数 k，判断数组中是否存在两个不同的索引 i 和 j，
- * 使得 nums [i] = nums [j]，并且 i 和 j 的差的 绝对值 至多为 k。
+ * 给定一个整数数组和一个整数k，判断数组中是否存在两个不同的索引i和j，
+ * 使得nums [i] = nums [j]，并且 i 和 j的差的 绝对值 至多为 k。
  *
  * 输入: nums = [1,2,3,1,2,3], k = 2
  * 输出: false
