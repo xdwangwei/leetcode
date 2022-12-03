@@ -5,7 +5,7 @@ import com.common.TreeNode;
 /**
  * @author wangwei
  * @date 2022/12/1 10:57
- * @description: _49_SumValueOfRootToLeafNodes
+ * @description: _049_SumValueOfRootToLeafNodes
  *
  * 剑指 Offer II 049. 从根节点到叶节点的路径数字之和
  * 给定一个二叉树的根节点 root ，树中每个节点都存放有一个 0 到 9 之间的数字。
@@ -51,7 +51,7 @@ import com.common.TreeNode;
  *
  * 通过次数23,724
  */
-public class _49_SumValueOfRootToLeafNodes {
+public class _049_SumValueOfRootToLeafNodes {
 
     /**
      * 二叉树的每条从根节点到叶子节点的路径都代表一个数字。

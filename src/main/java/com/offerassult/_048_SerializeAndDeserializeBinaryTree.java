@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * @author wangwei
  * @date 2022/12/1 10:36
- * @description: _48_SerializeAndDeserializeBinaryTree
+ * @description: _048_SerializeAndDeserializeBinaryTree
  *
  * 剑指 Offer II 048. 序列化与反序列化二叉树
  * 序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。
@@ -45,7 +45,7 @@ import java.util.*;
  *
  * 注意：本题与主站 297 题相同：https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/
  */
-public class _48_SerializeAndDeserializeBinaryTree {
+public class _048_SerializeAndDeserializeBinaryTree {
     /**
      * 中序遍历的方式行不通，因为无法实现反序列化方法 deserialize
      *

@@ -1,4 +1,4 @@
-package com.tree;
+package com.offerassult;
 
 import com.common.TreeNode;
 
@@ -7,35 +7,39 @@ import java.util.Map;
 
 /**
  * @author wangwei
- * 2020/8/29 13:03
- * 给定一个二叉树，它的每个结点都存放着一个整数值。
+ * @date 2022/12/3 10:47
+ * @description: _050_SumOfDownNodePaths
  *
- * 找出路径和等于给定数值的路径总数。
+ * 剑指 Offer II 050. 向下的路径节点之和
+ * 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
  *
- * 路径不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+ * 路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
  *
- * 二叉树不超过1000个节点，且节点数值范围是 [-1000000,1000000] 的整数。
  *
- * 示例：
  *
- * root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
+ * 示例 1：
  *
- *       10
- *     /    \
- *     5    -3
- *   /  \     \
- *  3    2     11
- * / \   \
- * 3 -2   1
  *
- * 返回 3。和等于 8 的路径有:
  *
- * 1.  5 -> 3
- * 2.  5 -> 2 -> 1
- * 3.  -3 -> 11
+ * 输入：root = [10,5,-3,3,2,null,11,3,-2,null,1], targetSum = 8
+ * 输出：3
+ * 解释：和等于 8 的路径有 3 条，如图所示。
+ * 示例 2：
  *
+ * 输入：root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+ * 输出：3
+ *
+ *
+ * 提示:
+ *
+ * 二叉树的节点个数的范围是 [0,1000]
+ * -109 <= Node.val <= 109
+ * -1000 <= targetSum <= 1000
+ *
+ *
+ * 注意：本题与主站 437 题相同：https://leetcode-cn.com/problems/path-sum-iii/
  */
-public class _437_PathSum3 {
+public class _050_SumOfDownNodePaths {
 
     /**
      * 方法一：深度优先搜索
@@ -87,7 +91,7 @@ public class _437_PathSum3 {
      * @param sum
      * @return
      */
-    private int leadingPathSum(TreeNode node, int sum) {
+    private int leadingPathSum(TreeNode node, long sum) {
         if (node == null) return 0;
         // 我自己能不能独当一面，作为一条单独的路径呢？
         int isMe = (node.val == sum) ? 1 : 0;

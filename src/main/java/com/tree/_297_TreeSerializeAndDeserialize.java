@@ -12,7 +12,7 @@ import java.util.Queue;
 /**
  * @author wangwei
  * @date 2022/12/1 10:36
- * @description: _48_SerializeAndDeserializeBinaryTree
+ * @description: _048_SerializeAndDeserializeBinaryTree
  *
  * 297. 序列化与反序列化二叉树
  * 序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。
