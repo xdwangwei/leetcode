@@ -43,8 +43,8 @@ public class SortingAlgorithmValidator {
             int[] arr1 = generateRandomArray(maxSize, maxNum);
             int[] arr2 = copyArray(arr1);
             // 自己的排序算法
-            // Algorithms.quickSort(arr1);
-            Algorithms.threeWayQuickSort(arr1);
+            Algorithms.quickSort(arr1);
+            // Algorithms.threeWayQuickSort(arr1);
             // jdk系统实现
             Arrays.sort(arr2);
             // 验证排序结果

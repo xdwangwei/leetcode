@@ -207,27 +207,36 @@ public class Algorithms {
      *      p 更新为 p + 1
      *      返回 p + 1
      *
+     *      其实，这里的判断条件可以是 如果 x < pivot就进行上述操作，
+     *          如果判断条件是 x <= pivot，对于中间部分和pivot一样的数字，也会进行上述过程，最后返回p代表最后一个等于pivot的位置
+     *          如果判断条件是 x < pivot，对于中间部分和pivot一样的数字，不会进行上述过程，最后返回p代表第一个等于pivot的位置
+     *          因为不管这里是否判断等号，while退出后都会交换p+1位置和right位置，并更新p为p+1，那么 [left, p]一定还是 <= pivot的
+     *          假如pivot=3，如果这里不判断等号，最终[2333689]会返回1（第一个3）；如果判断等号，最后会返回3（最后一个3）
+     *
+     *
      * 情况二就是 j 位置元素 > pivot，那么 j 直接前进即可
      *
      * 初始时让 p 为 left - 1，代表 [...p] 范围 都 <= pivot，然后 让 j 从 left 开始扫描到 right - 1，最后 把pivot放入合适位置
      *
      *
      * 为什么是j前进到right退出，不是j超出right退出呢？
-     * 因为 right位置元素本身就拿来做 pivot 了，它肯定是满足 <= pivot的，所以把 它 和结束后的 p + 1 位置元素交换，再更新p为p+1，也一定是合理的
-     * 相当于我们已经提前知道while最后一轮时，一定是破坏情况一的，所以我们把它单独拿出来做了一次操作；
-     * 那么，把这个情况放入while循环也没问题吧？也是可以的
-     * 但如果把划分目标改为 保证 nums[left, p] 都 < pivot，你再把它放入最后一轮循环就会出问题
-     * 因为 right位置上的元素 肯定不满足 < pivot，那么 这一次交换就不会被进行，就会导致 pivot 最终没有被放入合适位置
+     * 因为 right位置元素本身就拿来做 pivot 了，它肯定是满足 <= pivot的，
+     * 如果当j==right时进行判断，nums[j] <= pivot成立，会把 它 和 p + 1 位置元素交换，再更新p为p+1
+     * 这一步没问题，但是while结束后还要进行swap(++p, right)
+     * 如果刚才交换过来的 arr[p+1]==pivot，那也没问题，但如果交换过来的 arr[p+1]>pivot，那么此时应该返回p-1，因为p位置元素已经大于预定pivot了
+     *
+     * 所以，为了一致，我们j遍历到right位置就退出！！！
      *
      *
      * 【模板】
      *
-     * 所以建议 记住这个模板：不管划分目标是 nums[left, p] 都 <= pivot 还是 nums[left, p] 都 < pivot：统一操作：
+     * 所以建议 记住这个模板：划分目标是 nums[left, p] 都 <= pivot ：统一操作：
      *      1. 选择 nums[right] 作为 pivot，
      *      2. 让 p 初始化为 left - 1，代表 nums[...p] 范围 都 <= pivot
      *      3. 让 j 从 left 开始扫描到 right - 1
-     *              如果 nums[j] > pivot：j继续前进  （如果划分目标是nums[left, p] 都 < pivot，这里就是 nums[j] >= pivot）
-     *              否则：swap(nums, p + 1, j); p = p + 1; j继续前进，简写为 swap(nums, ++p, j); j++;
+     *              如果 nums[j] > pivot：j继续前进
+     *              否则：（nums[j] < pivot） 如果pivot=3，如果这里不判断等号，最终[2333689]会返回1（第一个3）；如果判断等号，最后会返回3（最后一个3）
+     *                  swap(nums, p + 1, j); p = p + 1; j继续前进，简写为 swap(nums, ++p, j); j++;
      *      4. 放置pivot到正确位置
      *              swap(nums, ++p, high);
      *      5. 返回 p

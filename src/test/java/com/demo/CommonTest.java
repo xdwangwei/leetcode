@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * @author wangwei37 <wangwei37@kuaishou.com>
+ * @author xidian.wangwei@gmail.com
  * Created on 2022-07-16
  */
 public class CommonTest {
