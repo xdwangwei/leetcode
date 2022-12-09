@@ -43,7 +43,7 @@ import java.util.Stack;
  * 链接：https://leetcode-cn.com/problems/convert-bst-to-greater-tree
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
-public class _538_ConvertBSTToGreaterTree {
+public class _1038_ConvertBSTToGreaterTree {
 
     /**
      * 递归
@@ -55,7 +55,7 @@ public class _538_ConvertBSTToGreaterTree {
      * @param root
      * @return
      */
-    public TreeNode convertBST(TreeNode root) {
+    public TreeNode bstToGst(TreeNode root) {
         traverse(root);
         return root;
     }
@@ -79,7 +79,7 @@ public class _538_ConvertBSTToGreaterTree {
     /**
      * 递归能实现,栈也应该能实现
      */
-    public TreeNode convertBST2(TreeNode root) {
+    public TreeNode bstToGst2(TreeNode root) {
         Stack<TreeNode> stack = new Stack<>();
         int sum = 0;
 
