@@ -1,14 +1,14 @@
-package com.hot100;
+package com.offerassult;
 
 import java.util.*;
 
 /**
  * @author wangwei
- * @date 2022/4/26 16:11
- * @description: _347_TopKFrequentElements
+ * @date 2022/12/15 19:27
+ * @description: _060_TopKFrequentElements
  *
- * 347. 前 K 个高频元素
- * 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
+ * 剑指 Offer II 060. 出现频率最高的 k 个数字
+ * 给定一个整数数组 nums 和一个整数 k ，请返回其中出现频率前 k 高的元素。可以按 任意顺序 返回答案。
  *
  *
  *
@@ -29,12 +29,18 @@ import java.util.*;
  * 题目数据保证答案唯一，换句话说，数组中前 k 个高频元素的集合是唯一的
  *
  *
- * 进阶：你所设计算法的时间复杂度 必须 优于 O(n log n) ，其中 n 是数组大小。
+ * 进阶：所设计算法的时间复杂度 必须 优于 O(n log n) ，其中 n 是数组大小。
+ *
+ *
+ *
+ * 注意：本题与主站 347 题相同：https://leetcode-cn.com/problems/top-k-frequent-elements/
+ *
+ * 通过次数21,035提交次数30,505
  */
-public class _347_TopKFrequentElements {
+public class _060_TopKFrequentElements {
 
     /**
-     * 词频统计 + 最小堆
+     * 方法一：词频统计 + 最小堆
      * 先用hashmap进行统计频次，得到一组 (val， freq) 类型键值对数据
      * 接着参考topk问题解决方案：
      *      维护一个大小为k的最小堆，堆中元素按照freq从小到大排序，这样，堆顶元素就是词频最小元素
@@ -75,7 +81,7 @@ public class _347_TopKFrequentElements {
 
 
     /**
-     * 词频统计 + 桶排序
+     * 方法二：词频统计 + 桶排序
      * 先用hashmap进行统计频次，得到一组 (val， freq) 类型键值对数据
      * 然后按照频率值的不同，将所有元素分配到不同频率值对应的桶中
      * 用数组实现桶，用频率作为桶的索引，这样，频率值（索引值）自然递增
@@ -126,7 +132,7 @@ public class _347_TopKFrequentElements {
 
 
     /**
-     * 词频统计 + 快速排序（选择）
+     * 方法三：词频统计 + 快速排序（选择）
      * 先用hashmap进行统计频次，得到一组 (val， freq) 类型键值对数据
      * 接着参考topk问题解决方案：
      * 我们可以使用基于快速排序的方法，求出「出现次数数组」的前 k 大的值。
@@ -239,7 +245,8 @@ public class _347_TopKFrequentElements {
     }
 
     public static void main(String[] args) {
-        _347_TopKFrequentElements obj = new _347_TopKFrequentElements();
-        obj.topKFrequent3(new int[]{5, -3, 9, 1, 7, 7, 9, 10, 2, 2, 10, 10, 3, -1, 3, 7, -9, -1, 3, 3}, 3);
+        _060_TopKFrequentElements obj = new _060_TopKFrequentElements();
+        obj.topKFrequent2(new int[]{1}, 1);
+        obj.topKFrequent2(new int[]{1, 1, 1, 2, 2, 3}, 2);
     }
 }
