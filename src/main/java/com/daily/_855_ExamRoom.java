@@ -1,4 +1,4 @@
-package com.order;
+package com.daily;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,12 +6,15 @@ import java.util.TreeSet;
 
 /**
  * @author wangwei
- * 2020/9/1 12:12
- * 在考场里，一排有N个座位，分别编号为0, 1, 2, ..., N-1。
+ * @date 2022/12/30 12:57
+ * @description: _855_ExamRoom
+ *
+ * 855. 考场就座
+ * 在考场里，一排有 N 个座位，分别编号为 0, 1, 2, ..., N-1 。
  *
  * 当学生进入考场后，他必须坐在能够使他与离他最近的人之间的距离达到最大化的座位上。如果有多个这样的座位，他会坐在编号最小的座位上。(另外，如果考场里没有人，那么学生就坐在 0 号座位上。)
  *
- * 返回ExamRoom(int N)类，它有两个公开的函数：其中，函数ExamRoom.seat()会返回一个int（整型数据），代表学生坐的位置；函数ExamRoom.leave(int p)代表坐在座位 p 上的学生现在离开了考场。每次调用ExamRoom.leave(p)时都保证有学生坐在座位p上。
+ * 返回 ExamRoom(int N) 类，它有两个公开的函数：其中，函数 ExamRoom.seat() 会返回一个 int （整型数据），代表学生坐的位置；函数 ExamRoom.leave(int p) 代表坐在座位 p 上的学生现在离开了考场。每次调用 ExamRoom.leave(p) 时都保证有学生坐在座位 p 上。
  *
  *
  *
@@ -32,13 +35,9 @@ import java.util.TreeSet;
  * 提示：
  *
  * 1 <= N <= 10^9
- * 在所有的测试样例中ExamRoom.seat()和ExamRoom.leave()最多被调用10^4次。
- * 保证在调用ExamRoom.leave(p)时有学生正坐在座位 p 上。
- *
- * 来源：力扣（LeetCode）
- * 链接：https://leetcode-cn.com/problems/exam-room
- * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
- *
+ * 在所有的测试样例中 ExamRoom.seat() 和 ExamRoom.leave() 最多被调用 10^4 次。
+ * 保证在调用 ExamRoom.leave(p) 时有学生正坐在座位 p 上。
+ * 通过次数13,415提交次数29,552
  */
 public class _855_ExamRoom {
 
@@ -78,7 +77,7 @@ public class _855_ExamRoom {
          *      我们发现这种情况的问题就在于虽然这两个线段长度不一样（只差了1），
          *      但是他们的一半是一样的 (right - left) / 2，实际上是选择这两个线段进行分割后的效果是一样的
          *      因此 按照线段长度的一半（即新加节点到左端点的距离）进行比较，如果相等的话，我们让索引更小的线段排到更后面
-         *      
+         *
          *      对于 a=-1的特殊情况，下一次必然选择0位置，此时它对应的一半距离其实就是选择0位置后与右端点的距离，即 b
          *      对于 b=n的特殊情况，下一次必然选择n-1位置，此时它对应的一半距离其实就是选择n-1位置后与左端点的距离，即 n-1-a
          *
@@ -116,7 +115,6 @@ public class _855_ExamRoom {
                 // 如果两线段的一半长度相等(4,5)，让索引小的线段更靠后，也就是首端点降序
                 if (len1 == len2) return intv2[0] - intv1[0];
                 // 按照线段长度从小到大排序，升序
-                // 最终set中最后一个元素就是一半长度最长，且索引最大的区间
                 return len1 - len2;
             });
             // 在有序集合中先放一个虚拟线段
@@ -133,9 +131,9 @@ public class _855_ExamRoom {
             // 对于特殊情况
             // 左边还没人，安排在最左边
             if (l == -1) seat = 0;
-            // 右边还没人，安排在最左边
+                // 右边还没人，安排在最左边
             else if (r == N) seat = N - 1;
-            // 左右都有人，安排在中间
+                // 左右都有人，安排在中间
             else seat = l + (r - l) / 2;
             // 安排位置后，相当于把一个长线段划分成两个短的
             // 移除长的
@@ -199,6 +197,4 @@ public class _855_ExamRoom {
         }
 
     }
-
-
 }
