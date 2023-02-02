@@ -3,7 +3,7 @@ package com.daily;
 /**
  * @author wangwei
  * @date 2023/2/1 18:17
- * @description: _DecodeTheMessage
+ * @description: _2325_DecodeTheMessage
  * 2325. 解密消息
  * 给你字符串 key 和 message ，分别表示一个加密密钥和一段加密消息。解密 message 的步骤如下：
  *
@@ -43,7 +43,7 @@ package com.daily;
  * message 由小写英文字母和 ' ' 组成
  * 通过次数11,811提交次数14,366
  */
-public class _DecodeTheMessage {
+public class _2325_DecodeTheMessage {
 
     /**
      * 方法一：数组 或 哈希表
