@@ -53,7 +53,7 @@ import java.util.Arrays;
 public class _1798_MaximumNumberOfConsecutiveValuesYouCanMake {
 
     /**
-     * 方法：贪心
+     * 方法：贪心 + 排序
      *
      * 需要返回我们能构造出从 0 开始（包括 0）的多少个连续整数。
      *
