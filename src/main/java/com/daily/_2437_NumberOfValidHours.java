@@ -60,8 +60,6 @@ public class _2437_NumberOfValidHours {
     public int countTime(String time) {
         // 得到 0-23 能匹配上的小时数，0-59 能匹配上的 分钟数，返回 二者的乘积
         char ha = time.charAt(0), hb = time.charAt(1), ma = time.charAt(3), mb = time.charAt(4);
-
-
         return cnt(ha, hb, 24) * cnt(ma, mb, 60);
     }
 
