@@ -74,7 +74,7 @@ public class _1015_MinimumNumberCanBeDividedByK {
         // 初始化
         int x = 1 % k;
         // i 代表位数
-        for (int i = 1; i < k; i++) { // 一定有解
+        for (int i = 1; i <= k; i++) { // 一定有解
             // n % k 的结果在 0,k-1 ，最多循环 k 次
             if (x == 0) {
                 return i;
