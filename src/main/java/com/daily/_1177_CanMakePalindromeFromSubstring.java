@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * @author wangwei
- * @date 2023/6/16 18:28
+ * @date 2023/6/15 18:28
  * @description: _1177_CanMakePalindromeFromSubstring
  *
  * 1177. 构建回文串检测
